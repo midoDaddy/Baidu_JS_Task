@@ -1,0 +1,39 @@
+
+<!-- 本任务完成的功能为：用户可以在输入框中输入任何内容，点击“确认填写”按钮后，用户输入的内容会显示在“您输入的值是”文字的右边 -->
+
+<!DOCTYPE html>
+<html>
+  	<head>
+    	<meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+    	<title>IFE JavaScript Task 13</title>
+  	</head>
+<body>
+  	<label>请输入北京今天空气质量：<input id="aqi-input" type="text"></label>
+  	<button id="button">确认填写</button>
+  	<div>您输入的值是：<span id="aqi-display">尚无录入</span></div>
+
+<script type="text/javascript">
+    (function(){
+    	var $ = function(id){
+    		return document.getElementById(id);
+    	}
+    	var handler = function(){
+    		var num = parseInt($("aqi-input").value);
+    		if (num >= 0 && num <= 500) {
+    			$("aqi-display").innerHTML = num;
+    		}else{
+    			$("aqi-display").innerHTML = "请输入0~500的数字";
+    		}
+    	}
+    	$("button").onclick = function(){
+    		handler();
+    	}
+    	$("aqi-input").onkeyup = function(){
+    		if (event.keyCode === 13) {
+    			handler();
+    		}
+    	}
+    })()
+</script>
+</body>
+</html>
