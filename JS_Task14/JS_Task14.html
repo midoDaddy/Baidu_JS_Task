@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>IFE JavaScript Task 14</title>
+	</head>
+<body>
+	<h3>污染城市列表</h3>
+	<ul id="aqi-list">
+		
+	</ul>
+
+<script type="text/JavaScript">
+
+var aqiData = [
+	["北京", 90],
+	["上海", 50],
+	["福州", 10],
+	["广州", 50],
+	["成都", 90],
+	["西安", 100],
+	["哈尔滨", 110],
+	["杭州", 75]
+];
+
+
+(function(){
+	var str = "";
+	var chineseNumbers = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+	var ulList = document.getElementById("aqi-list");
+
+	aqiData.filter(function(item){
+		return item[1] >= 60;
+	}).sort(function(arr1, arr2){
+		return arr2[1] - arr1[1];
+	}).forEach(function(item, index){
+		//通过构建字符串再一次性赋值给innerHTML，可以减少innerHTML的读写次数，减少HTML解析器的使用次数，从而提升性能
+		str += "<li>第" + chineseNumbers[index] + "名： " + item[0] + "，" + item[1] + "</li>";
+	});
+
+	ulList.innerHTML = str;
+	
+	/*for (var i = 0; i < aqiData.length; i++) {
+		if(aqiData[i][1] >= 60){
+			selectedData.push(aqiData[i]);
+		}
+	}
+	function compareAqiData(arr1, arr2){
+		return arr2[1] - arr1[1];
+	}
+	selectedData.sort(compareAqiData);
+	for (var i = 0; i < selectedData.length; i++) {
+		 str += "<li>第" + chineseNumbers[i] + "名： " + selectedData[i][0] + "，" + selectedData[i][1] + "</li>";
+	}
+*/
+	
+})();
+
+</script>
+
+
+</body>
