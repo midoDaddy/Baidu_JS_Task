@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-10 10:44:04
+* @Last Modified time: 2017-08-10 11:38:29
 */
 
 'use strict';
@@ -93,7 +93,7 @@
     };
     $('num-box').onclick = function(e) {
         var target = e.target;
-        if (target.tagName === 'DIV') {
+        if (target.className.indexOf('num-item') >= 0) {
             delNumItem(target);
             renderData();
         }
