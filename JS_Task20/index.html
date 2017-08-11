@@ -1,0 +1,66 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>IFE JavaScript Task 20</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                line-height: 25px;
+            }
+            .text-input {
+                margin: 20px 0 0 20px;
+            }
+            .controler-wrap {
+                margin: 20px;
+            }
+            .btn {                
+                margin-right: 10px;
+                padding: 0 10px;
+            }
+            .controler-wrap input {
+                margin-right: 10px;
+            }
+            .text-list {
+                margin: 20px;
+            }
+            .text-list li {
+                display: inline-block;
+                height: 30px;
+                padding: 0px 10px;
+                margin: 10px 10px 0 0;
+                font-size: 15px;
+                line-height: 30px; 
+                color: #fff;
+                text-align: center;
+                background: pink;                             
+                cursor: pointer;
+            }          
+            .highlight {
+                font-size: 15px;
+                line-height: 30px; 
+                color: red;
+                background: yellow;
+            }
+            
+        </style>
+    </head>
+<body>
+
+    <textarea id="text-input" class="text-input" cols="40" rows="3"></textarea><br />
+    <div id="controler" class="controler-wrap">
+        <button id="left-in-btn" class="btn">左侧入</button>
+        <button id="right-in-btn" class="btn">右侧入</button>
+        <button id="left-out-btn" class="btn">左侧出</button>
+        <button id="right-out-btn" class="btn">右侧出</button>
+        <button id="test-btn" class="btn">测试数据</button>
+        <input type="text" id="search-input">
+        <button id="search-btn" class="btn">查询</button>
+    </div>
+    <ul id="text-list" class="text-list"></ul>
+    <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
+    <script src="index.js"></script>
+</body>
+</html>
