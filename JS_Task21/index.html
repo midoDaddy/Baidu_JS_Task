@@ -1,0 +1,75 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>IFE JavaScript Task 19</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                line-height: 20px;
+            }
+            .wrap {
+                margin: 20px 0 0 20px;
+                padding: 15px;
+                border: 1px solid #eee;
+            }
+            .list {
+                margin-top: 10px;
+                list-style-type: none;
+            }
+            .list li {
+                display: inline-block;
+                height: 30px;
+                padding: 0 10px;
+                margin: 10px 10px 0 0;
+                font-size: 16px;
+                line-height: 30px;
+                color: #fff;
+                cursor: pointer;
+            }
+            .tag-list li {
+                background: lightblue;
+            }
+            .tag-list li:hover {
+                background: red;
+            }
+            .hobby-list li {
+                background: pink;
+            }
+            .tag-label {
+                margin-right: 15px;
+            }
+            .btn {
+                margin-top: 5px;
+                margin-right: 10px;
+                height: 25px;
+                line-height: 25px;
+                padding: 0 15px;
+                font-size: 12px;
+                outline: none;
+                cursor: pointer;
+            }
+            .highlight {
+                background: orange;
+            }
+        </style>
+    </head>
+<body>
+    <div class="wrap">
+        <label for="tag-input" class="tag-label">Tag: </label>
+        <input type="text" name="tag-input" id="tag-input" class="tag-input">
+        <ul class="tag-list list" id="tag-list"></ul>
+    </div>
+    <div class="wrap">
+        <textarea name="hobby-input" id="hobby-input" class="hobby-input" cols="30" rows="5"></textarea>
+        <br />
+        <button id="hobby-test-btn" class="btn">生成测试数据</button>
+        <button id="hobby-confirm-btn" class="btn">确定兴趣爱好</button>
+        <ul class="hobby-list list" id="hobby-list"></ul>
+    </div>
+    <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
+    <script src="index.js"></script>
+</body>
+</html>
