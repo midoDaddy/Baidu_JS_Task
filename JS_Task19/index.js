@@ -1,8 +1,8 @@
 /*
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
-* @Last Modified by:   63431
-* @Last Modified time: 2017-08-10 17:03:38
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-11 16:34:07
 */
 
 'use strict';
@@ -87,6 +87,7 @@
            listHtml += '<div class="num-item-' + index + '" style="height:' + item*5 + 'px"></div>'; 
         });
         $('num-box').innerHTML = listHtml;
+        numInput.value = '';
     }
 
     //冒牌排序动画演示

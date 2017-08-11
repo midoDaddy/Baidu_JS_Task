@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-11 11:07:51
+* @Last Modified time: 2017-08-11 16:32:17
 */
 
 'use strict';
@@ -87,6 +87,7 @@
            listHtml += '<li class="text-item-' + index + '">' + item + '</li>'; 
         });
         textList.innerHTML = listHtml;
+        textInput.value = '';
     }
 
     //搜索数据
@@ -102,7 +103,6 @@
                 flag = true;
             }           
         }
-        console.log(flag)
         if (!flag) {
             alert('未发现目标噢~')
         }

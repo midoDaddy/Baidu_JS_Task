@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-10 11:38:29
+* @Last Modified time: 2017-08-11 16:34:53
 */
 
 'use strict';
@@ -72,6 +72,7 @@
            listHtml += '<div class="num-item-' + index + '">' + item + '</div>'; 
         });
         document.getElementById('num-box').innerHTML = listHtml;
+        numInput.value = '';
     }
 
     //添加事件函数
