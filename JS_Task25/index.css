@@ -1,0 +1,85 @@
+/*
+* @Author: 63431
+* @Date:   2017-08-14 21:07:08
+* @Last Modified by:   63431
+* @Last Modified time: 2017-08-15 10:12:35
+*/
+*{
+    margin: 0;
+    padding: 0;
+}
+.wrapper {
+    margin: 30px;
+}
+.btn {
+    height: 30px;
+    padding: 0 20px;
+    margin-right: 10px;
+    line-height: 30px;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: tomato;
+}
+.search-input {
+    width: 200px;
+    height: 30px;
+    margin-right: 10px;
+    padding-left: 15px;
+    line-height: 28px;
+    border: 1px solid tomato;
+    outline: none;
+}
+.content {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 25px;
+    color: #333;
+}
+.content ul {
+    list-style-type: none;
+    position: relative;
+}
+.content li {
+    padding-left: 20px;
+}            
+.title {
+    position: relative;
+    margin-top: 5px;
+    user-select: none;
+}
+.content>p .title-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+.content>ul>li>p .title-text {
+    font-weight: bold;
+}
+.iconfont {
+    color: tomato;
+    cursor: pointer;
+}
+.iconfont:hover {
+    font-weight: bold;
+}
+.icon-packup, .icon-unfold {
+    position: absolute;
+    bottom: 0;
+    left: -20px;
+}
+.icon-addition, .icon-delete {
+    position: absolute;
+    display: none;
+    bottom: 0;
+}
+.icon-addition {
+    margin-left: 30px;
+}
+.icon-delete {
+    margin-left: 60px;
+}
+.title:hover .icon-addition, 
+.title:hover .icon-delete {
+    display: inline;
+}
