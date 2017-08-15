@@ -1,0 +1,100 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>IFE JavaScript Task 29</title>
+        <style>
+            .wrapper {
+                margin: 30px;
+                font-size: 16px;
+                line-height: 40px;
+                color: #333;
+            }
+            label {
+                display: inline-block;
+                width: 80px;
+            }
+            input {
+                height: 38px;
+                width: 200px;
+                padding-left: 15px;
+                border-radius: 3px;
+                border: 1px solid #999;
+                outline: none;
+            }
+            button {
+                height: 40px;
+                padding: 0 20px;
+                margin-left: 15px;
+                font-size: 16px;
+                color: #fff;
+                background: tomato;
+                border: none;
+                outline: none;
+                border-radius: 3px;
+                vertical-align: bottom;
+                cursor: pointer;
+            }
+            .tip {
+                padding-left: 85px;
+                font-size: 12px;
+                color: #999;
+                line-height: 20px;
+            }
+            
+        </style>
+    </head>
+<body>
+    <div class="wrapper">
+        <div class="form-item">
+            <label for="username-input">用户名</label>
+            <input type="text" id="username-input">
+            <button id="validate-btn">验证</button>
+            <p id="tip" class="tip">必填，长度为4~16位字符</p>
+        </div>
+    </div>
+    
+    
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        (function(){
+
+            var tip = document.getElementById('tip'),
+                input = document.getElementById('username-input'),
+                validateBtn = document.getElementById('validate-btn');
+
+            function getLength(str) {
+                return str.replace(/[^\x00-\xff]/g, 'aa').length;
+            }
+
+            function showTip(color, text) {
+                tip.innerHTML = text;
+                input.style.borderColor = color;
+                tip.style.color = color;
+            }
+
+            function checkUsername() {
+                var value = input.value.trim(),
+                    length = getLength(value);               
+                if (length <= 16 && length >= 4) {
+                    showTip('green', '用户名格式正确');
+                } else if (value === '') {                        
+                    showTip('red', '用户名不能为空');
+                } else {
+                    showTip('red', '用户名格式错误，请输入4~16位字符');
+                }
+            }
+
+            function reset() {
+                showTip('#999', '必填，长度为4~16位字符');
+            }
+
+            input.addEventListener('blur', checkUsername);
+            input.addEventListener('focus', reset);
+
+        })();
+                
+    </script>
+</body>
+</html>
+
