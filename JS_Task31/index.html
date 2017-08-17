@@ -1,0 +1,88 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>IFE JavaScript Task 31</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;               
+            }
+            body {
+                font-size: 20px;
+                line-height: 30px;
+                color: #333;
+            }
+            .wrapper {
+                width: 500px;
+                margin: 30px auto;
+                padding: 20px;
+                border: 2px solid tomato;
+            }
+            .form-item {
+                padding: 15px;
+                text-align: center;
+            }
+            .company-form {
+                display: none;
+            }
+            .radio-input {
+                margin-left: 30px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            label {
+                cursor: pointer;
+            }
+            .select-box,
+            .company-input {
+                height: 40px;
+                margin-left: 15px;
+                padding-left: 10px;
+                border: 1px solid tomato;
+                outline: none;
+            }
+            .select-box.city-select {
+                width: 100px;
+            }
+            .select-box.school-select {
+                width: 150px;
+            }
+            .company-input {
+                width: 250px;
+            }
+            
+        </style>
+    </head>
+<body>
+    <div class="wrapper">
+        <div class="form-item top-item" >
+            <input type="radio" class="radio-input" id="student-radio" name="person-type" checked="checked">
+            <label for="student-radio">在校生</label>
+            <input type="radio" class="radio-input" id="non-student-radio" name="person-type">
+            <label for="non-student-radio">非在校生</label>
+        </div>
+        <div class="form-item school-form" id="school-form">
+            <label for="city-select">学校</label>
+            <select name="city-select" id="city-select" class="select-box city-select">
+                <option value="北京">北京</option>
+                <option value="南京">南京</option>
+                <option value="武汉">武汉</option>
+                <option value="上海">上海</option>
+                <option value="西安">西安</option>
+                <option value="天津">天津</option>
+            </select>
+            <select name="school-select" id="school-select" class="select-box school-select">               
+            </select>
+        </div>
+        <div class="form-item company-form" id="company-form">
+            <label for="company-input">就业单位</label>
+            <input type="text" id="company-input" class="company-input">
+        </div>
+    </div>
+    
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
+
