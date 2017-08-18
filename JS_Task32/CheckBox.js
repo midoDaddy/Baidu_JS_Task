@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-17 17:34:01
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-17 22:52:30
+* @Last Modified time: 2017-08-18 10:38:25
 */
 //定义表单项构造函数
 function CheckBox(cfg) {
@@ -45,7 +45,7 @@ CheckBox.prototype = {
 
     //创建wrapper
     createWrapper: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         this.wrapper = document.createElement('div');
         this.wrapper.className = cfg.specialTheme ? 
             (cfg.basicTheme + ' ' + cfg.specialTheme) : cfg.basicTheme;
@@ -54,7 +54,7 @@ CheckBox.prototype = {
 
     //创建label
     createLabel: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         if (cfg.label) {
             this.label = document.createElement('label');
             this.label.for = cfg.id;
@@ -65,7 +65,7 @@ CheckBox.prototype = {
     
     //创建checkbox表单组
     createItemGroup: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         this.itemGroup = [];
         for (var i = 0; i < cfg.count; i++) {          
             var labelWrapper = document.createElement('label'),
@@ -88,7 +88,7 @@ CheckBox.prototype = {
 
     //创建tip
     createTip: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         if (cfg.tipFlag) {
             this.tip = document.createElement('p');
             this.tip.className = 'tip';

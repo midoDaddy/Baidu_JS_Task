@@ -2,17 +2,23 @@
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-18 10:16:27
+* @Last Modified time: 2017-08-18 10:37:38
 */
 
 //合并对象
 function extend(obj1, obj2) {
-    for (var item in obj2) {
-        if (obj2.hasOwnProperty(item)) {
-            obj1[item] = obj2[item];
+    var newObj = {};
+    for (var item in obj1) {
+        if (obj1.hasOwnProperty(item)) {
+            newObj[item] = obj1[item];
         }
     }
-    return obj1;
+    for (var item in obj2) {
+        if (obj2.hasOwnProperty(item)) {
+            newObj[item] = obj2[item];
+        }
+    }
+    return newObj;
 }
 
 //定义表单项构造函数
@@ -72,7 +78,7 @@ FormItem.prototype = {
     
     //创建wrapper
     createWrapper: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         this.wrapper = document.createElement('div');
         this.wrapper.className = cfg.specialTheme ? 
             (cfg.basicTheme + ' ' + cfg.specialTheme) : cfg.basicTheme;
@@ -81,7 +87,7 @@ FormItem.prototype = {
 
     //创建label
     createLabel: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         if (cfg.label) {
             this.label = document.createElement('label');
             this.label.for = cfg.id;
@@ -92,7 +98,7 @@ FormItem.prototype = {
 
     //创建tip
     createTip: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         if (cfg.tipFlag) {
             this.tip = document.createElement('p');
             this.tip.className = 'tip';
@@ -102,7 +108,7 @@ FormItem.prototype = {
 
     //创建表单元素
     createFormElem: function() {
-        var cfg = this.cfg;
+        var cfg = this.CFG;
         switch(cfg.type) {
             case 'input': this.formElem = this.createInput();
                 break;
@@ -119,15 +125,14 @@ FormItem.prototype = {
     
     //创建input表单项
     createInput: function() {
-        var cfg = this.cfg,
-            item = document.createElement('input');
-        item.type = cfg.inputType;
+        var item = document.createElement('input');
+        item.type = this.CFG.inputType;
         return item;
     },
 
     //创建textarea表单项
     createTextarea: function() {
-        var cfg = this.cfg,
+        var cfg = this.CFG,
             item = document.createElement('textarea');
         item.cols = cfg.cols;
         item.rows = cfg.rows;
@@ -136,7 +141,7 @@ FormItem.prototype = {
 
     //创建select表单项
     createSelect: function() {
-        var cfg = this.cfg,
+        var cfg = this.CFG,
             item = document.createElement('select'),
             html = '';
         cfg.options.forEach(function(item, index) {
