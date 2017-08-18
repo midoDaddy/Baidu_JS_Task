@@ -1,0 +1,127 @@
+/*
+* @Author: midoDaddy
+* @Date:   2017-08-17 10:29:34
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-17 22:16:41
+*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 35px;
+    color: #666;
+    border: 1px solid #ddd;
+}
+.wrapper.tomato {
+    color: tomato;
+    border-color: tomato;
+}
+.wrapper .title {
+    font-size: 20px;
+    line-height: 2;
+    text-align: center;
+}
+
+/* 默认主题 */
+.form-item-basic {
+    padding: 0 20px;
+    margin: 15px 0;  
+    color: #666; 
+}
+.form-item-basic label {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.form-item-basic input {
+    height: 35px;
+    width: 300px;
+    border: 1px solid #ccc;
+    padding-left: 15px;
+    outline: none;
+}
+.form-item-basic .tip {
+    height: 20px;
+    margin-top: 5px;
+    padding-left: 115px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #aaa;
+}
+.form-item-basic textarea {
+    width: 300px;
+    padding: 10px 15px;   
+    border: 1px solid #ccc;
+    outline: none;
+    vertical-align: top;
+}
+.form-item-basic select {
+    width: 300px;
+    height: 35px;
+    padding-left: 10px;
+    outline: none;
+}
+.form-item-basic .error-item {
+    border-color: red;
+}
+.form-item-basic .error-tip {
+    color: red;
+}
+.form-item-basic .success-item {
+    border-color: green;
+}
+.form-item-basic .success-tip {
+    color: green;
+}
+
+/* tomato主题 */
+.form-item-tomato {
+    width: 400px;
+    margin: 20px auto;
+    color: tomato;
+    text-align: center;
+    position: relative;
+}
+.form-item-tomato input,
+.form-item-tomato select,
+.form-item-tomato textarea {
+    width: 398px;
+    border-color: tomato;
+    border-radius: 3px;
+    padding-left: 115px;
+}
+.form-item-tomato label {
+    width: 85px;
+    position: absolute;
+    top: 0;
+    bottom: 25px;
+    padding-right: 15px;
+    background: tomato;
+    color: #fff;
+    text-align: right;
+    border-radius: 3px;
+}
+.form-item-tomato .tip {
+    text-align: left;
+    padding-left: 115px;
+}
+
+/* checkbox样式 */
+.form-item-basic .label-wrapper {
+    display: inline;
+}
+.label-wrapper input {
+    width: 15px;
+    height: 15px;
+    margin-left: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
