@@ -1,0 +1,99 @@
+/*  * @Author: 63431
+* @Date:   2017-08-14 21:07:08
+* @Last Modified by:   63431
+* @Last Modified time: 2017-08-18 22:37:48
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    padding: 50px;
+    width: 550px;
+    margin: 0 auto;
+}
+.table-wrapper {
+    position: relative;
+    margin-left: 30px;
+}
+
+.bg-table {
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    border-collapse: collapse;
+    border: 3px solid pink;
+
+}
+.bg-table td {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #ddd;
+}
+
+.list {
+    list-style-type: none;
+    position: absolute;    
+    font-size: 16px;
+    color: #333;
+}
+.num-list-top {
+    top: -30px;
+    left: 0;
+}
+.num-list-top li {
+    float: left;
+    height: 30px;
+    width: 50px;
+    line-height: 30px;
+    text-align: center;
+}
+.num-list-left {
+    top: 0;
+    left: -30px;
+}
+.num-list-left li {
+    height: 50px;
+    width: 30px;
+    line-height: 50px;
+    text-align: left;
+}
+
+.order-wrapper {
+    padding-top: 520px;
+}
+.order-input {
+    height: 38px;
+    width: 250px;
+    margin-right: 10px;
+    text-indent: 15px;
+    border: 1px solid pink;
+    outline: none;
+}
+.btn {
+    height: 40px;
+    padding: 0 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    line-height: 40px;
+    color: #fff;
+    border: none;
+    outline: none;
+    background: pink;
+    vertical-align: top;
+}
+.quick-btn-wrapper {
+    margin-top: 20px;
+}
+.car {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 38px;
+    background: tomato;
+    border-top: 10px solid green;
+    transition: all 1s;
+}
