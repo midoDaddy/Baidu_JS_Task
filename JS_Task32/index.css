@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-17 10:29:34
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-17 22:16:41
+* @Last Modified time: 2017-08-18 15:23:51
 */
 * {
     margin: 0;
@@ -45,7 +45,7 @@
     height: 35px;
     width: 300px;
     border: 1px solid #ccc;
-    padding-left: 15px;
+    text-indent: 15px;
     outline: none;
 }
 .form-item-basic .tip {
@@ -57,7 +57,7 @@
     color: #aaa;
 }
 .form-item-basic textarea {
-    width: 300px;
+    width: 270px;
     padding: 10px 15px;   
     border: 1px solid #ccc;
     outline: none;
@@ -66,7 +66,7 @@
 .form-item-basic select {
     width: 300px;
     height: 35px;
-    padding-left: 10px;
+    text-indent: 15px;
     outline: none;
 }
 .form-item-basic .error-item {
@@ -96,13 +96,16 @@
     width: 398px;
     border-color: tomato;
     border-radius: 3px;
-    padding-left: 115px;
+    text-indent: 115px;
+}
+.form-item-tomato textarea {
+    width: 368px;
 }
 .form-item-tomato label {
     width: 85px;
     position: absolute;
-    top: 0;
-    bottom: 25px;
+    top: 1px;
+    bottom: 26px;
     padding-right: 15px;
     background: tomato;
     color: #fff;
