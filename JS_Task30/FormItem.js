@@ -1,18 +1,24 @@
 /*
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
-* @Last Modified by:   63431
-* @Last Modified time: 2017-08-16 17:48:21
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-18 10:48:51
 */
 
 //合并对象
 function extend(obj1, obj2) {
-    for (var item in obj2) {
-        if (obj2.hasOwnProperty(item)) {
-            obj1[item] = obj2[item];
+    var newObj = {};
+    for (var item in obj1) {
+        if (obj1.hasOwnProperty(item)) {
+            newObj[item] = obj1[item];
         }
     }
-    return obj1;
+    for (var item in obj2) {
+        if (obj2.hasOwnProperty(item)) {
+            newObj[item] = obj2[item];
+        }
+    }
+    return newObj;
 }
 
 //定义表单项构造函数
@@ -25,9 +31,9 @@ function FormItem(cfg) {
         pattern: null,
         equalTo: null,
         errorTip: '格式错误',
-        passTip: '格式正确',
+        successTip: '格式正确',
         requiredTip: '必填项，不能为空',
-        defaultTip: '',
+        rulesTip: '',
         tipContainer: null
     };
     this.CFG = extend(this.cfg, cfg);
@@ -39,16 +45,25 @@ FormItem.prototype = {
     
     constructor: FormItem, 
 
-    //显示提示信息   
-    showTip: function(msg, color) {
-        this.elem.style.borderColor = color;     
-        this.tipContainer.style.color = color;
-        this.tipContainer.innerHTML = msg;
+    //显示正确提示  
+    showSuccessTip: function() {
+        this.elem.className = 'item-success',    
+        this.tipContainer.className = 'tip tip-success';
+        this.tipContainer.innerHTML = this.CFG.successTip;
+    },
+
+    //显示错误提示  
+    showErrorTip: function(requiredFlag) {
+        this.elem.className = 'item-error',    
+        this.tipContainer.className = 'tip tip-error';
+        this.tipContainer.innerHTML = requiredFlag ? this.CFG.requiredTip : this.CFG.errorTip;
     },
 
     //显示默认提示
-    showDefaultTip: function() {       
-        this.showTip(this.CFG.defaultTip, '#999');
+    showDefaultTip: function() {
+        this.elem.className = '',    
+        this.tipContainer.className = 'tip';
+        this.tipContainer.innerHTML = this.CFG.rulesTip;
     },
 
     //验证表单值
@@ -61,40 +76,40 @@ FormItem.prototype = {
         //验证必填项是否为空
         if (cfg.required) {
             if (length === 0) {
-                this.showTip(cfg.requiredTip, 'red');
+                this.showErrorTip(true);
                 return false;
             }
         }
         //验证最大长度
         if (cfg.maxLength) {
             if (length > cfg.maxLength) {
-                this.showTip(errorTip, 'red');
+                this.showErrorTip();
                 return false;
             }
         }
         //验证最小长度
         if (cfg.minLength) {
             if (length < cfg.minLength) {
-                this.showTip(errorTip, 'red');
+                this.showErrorTip();
                 return false;
             }
         }
         //验证是否匹配正则表达式
         if (cfg.pattern) {
             if (!cfg.pattern.test(value)) {
-                this.showTip(errorTip, 'red');
+                this.showErrorTip();
                 return false;
             }
         }       
         //验证是否等于特定值
         if (cfg.equalTo) {
             if (value !== cfg.equalTo.value.trim()) {
-                this.showTip(errorTip, 'red');
+                this.showErrorTip();
                 return false;
             }
         }
         //如果验证通过，显示通过提示       
-        this.showTip(cfg.passTip, 'green');
+        this.showSuccessTip();
         return true;
     },
     
