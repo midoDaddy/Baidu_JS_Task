@@ -1,7 +1,7 @@
 /*  * @Author: 63431
 * @Date:   2017-08-14 21:07:08
-* @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-18 23:26:25
+* @Last Modified by:   63431
+* @Last Modified time: 2017-08-18 23:26:48
 */
 
 * {
@@ -85,8 +85,21 @@
     vertical-align: top;
     cursor: pointer;
 }
+.btn:hover {
+    background: tomato;
+}
 .quick-btn-wrapper {
-    margin-top: 20px;
+    position: absolute;
+    width: 150px;
+    top: 0;
+    left: 530px;
+}
+.quick-btn-wrapper .btn {
+    display: block;
+    height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    margin-bottom: 7px;
 }
 .car {
     position: absolute;
