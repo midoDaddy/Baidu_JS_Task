@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-21 15:45:17
+* @Last Modified time: 2017-08-21 16:53:46
 */
 
 
@@ -64,24 +64,13 @@ OrderInput.prototype = {
 
     //验证指令有效性
     checkOrder: function(value) {
-        var flag = false;
-        this.CFG.validOrder.noNum.forEach(function(item) {
-            if (value === item) {
-                flag = true;
-            }
-        });
-        this.CFG.validOrder.withNum.forEach(function(item) {
-            if (value === item) {
-                flag = true;
-            } else {
-                var replacedValue = value.replace(new RegExp(item), ''),
-                    pattern = /^\s[1-9]$/;
-                if (pattern.test(replacedValue)) {
-                    flag = true;
-                }               
-            }
-        });
-        return flag;
+        var cfg = this.CFG,
+            replacedValue = value.replace(/\s[1-9]$/, '');
+        if (cfg.validOrder.noNum.indexOf(value) > -1 || cfg.validOrder.withNum.indexOf(replacedValue) > -1) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     //获取指令参数：类型与格数
@@ -95,7 +84,7 @@ OrderInput.prototype = {
     },
 
     //根据指令执行相应函数
-    executeOrder: function(order) {
+    runOrder: function(order) {
         var cfg = this.CFG;
             orderType =  this.getOrderParam(order)[0],
             orderCount = this.getOrderParam(order)[1];
@@ -128,13 +117,13 @@ OrderInput.prototype = {
     },
 
     //依次执行指令序列
-    executeOrderGroup: function(n) {
+    runOrderGroup: function() {
         var orderArr = this.inputBox.value.split('\n'),
             that = this;
         this.clearErrorTip();
         orderArr.forEach(function(item, index) {
             setTimeout(function(){
-                that.checkOrder(item) ? that.executeOrder(item) : that.showErrorTip(index);
+                that.checkOrder(item) ? that.runOrder(item) : that.showErrorTip(index);
             }, 1000*index)            
         })
     },

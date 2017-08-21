@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-21 15:38:41
+* @Last Modified time: 2017-08-21 16:53:57
 */
 
 'use strict';
@@ -42,7 +42,7 @@
             validOrder: validOrder,
             orderTarget: car
         });          
-        $('order-btn').addEventListener('click', orderInput.executeOrderGroup.bind(orderInput));
+        $('order-btn').addEventListener('click', orderInput.runOrderGroup.bind(orderInput));
         $('refresh-btn').addEventListener('click', orderInput.clearOrder.bind(orderInput));
     }
     
