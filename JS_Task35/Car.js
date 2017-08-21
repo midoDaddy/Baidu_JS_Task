@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-21 15:42:37
+* @Last Modified time: 2017-08-21 17:56:46
 */
 
 
@@ -26,7 +26,7 @@ function extend(obj1, obj2) {
     return newObj;
 }
 
-//定义表单项构造函数
+//定义car构造函数
 function Car(cfg) {
     this.cfg = {
         container: null,

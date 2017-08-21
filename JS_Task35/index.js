@@ -2,16 +2,11 @@
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-21 16:53:57
+* @Last Modified time: 2017-08-21 17:56:31
 */
 
 'use strict';
  (function(){
-        
-    var validOrder = {
-        withNum: ['GO', 'TRA LEF', 'TRA TOP', 'TRA RIG', 'TRA BOT', 'MOV TOP', 'MOV LEF', 'MOV RIG', 'MOV BOT'],
-        noNum: ['TUN LEF', 'TUN RIG', 'TUN BAK']
-    };
     
     //渲染背景表格
     function renderTable() {
@@ -39,7 +34,6 @@
         var orderInput = new OrderInput({
             inputBox: $('order-input-box'),
             indexList: $('order-index-list'),
-            validOrder: validOrder,
             orderTarget: car
         });          
         $('order-btn').addEventListener('click', orderInput.runOrderGroup.bind(orderInput));

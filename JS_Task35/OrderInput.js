@@ -2,16 +2,19 @@
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-21 16:53:46
+* @Last Modified time: 2017-08-21 17:56:05
 */
 
 
-//定义表单项构造函数
+//定义OrderInput构造函数
 function OrderInput(cfg) {
     this.cfg = {
         inputBox: null,
         indexList: null,
-        validOrder: null,
+        validOrder: {
+            withNum: ['GO', 'TRA LEF', 'TRA TOP', 'TRA RIG', 'TRA BOT', 'MOV TOP', 'MOV LEF', 'MOV RIG', 'MOV BOT'],
+            noNum: ['TUN LEF', 'TUN RIG', 'TUN BAK']
+        },
         errorClass: 'error',
         orderTarget: null
     };
@@ -135,7 +138,7 @@ OrderInput.prototype = {
     },
 
     //序号列表与输入框同步滚动
-    scrollIndexList: function(n) {
+    scrollIndexList: function() {
         this.indexList.style.top = -this.inputBox.scrollTop + 'px';
     },
     
