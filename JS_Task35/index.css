@@ -1,7 +1,7 @@
 /*  * @Author: 63431
 * @Date:   2017-08-14 21:07:08
-* @Last Modified by:   63431
-* @Last Modified time: 2017-08-20 02:44:26
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-21 14:20:58
 */
 
 * {
@@ -79,6 +79,13 @@
     position: absolute;
     top: 225px;
     left: 550px;
+    
+}
+.order-box-wrapper {
+    position: relative;    
+    height: 220px;
+    overflow: hidden;
+    margin-bottom: 15px;
 }
 .order-input-box {    
     margin-bottom: 10px;
@@ -91,24 +98,24 @@
     background: #000; 
     outline: none;
 }
-.input-index-list {
+.order-index-list {
     list-style-type: none;
     position: absolute;
     top: 0;
+    bottom: 0;
     left: 0;   
-    height: 200px;
-    padding: 10px 0;
+    padding: 10px 1px;
     color: #fff;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
     text-align: center;
     background: #ccc;
 }
-.input-index-item {
+.order-index-list li {
     height: 20px;
     width: 20px;
 }
-.input-index-item.error {
+.order-index-list li.error {
     background: red;
     border-radius: 100%;
 }

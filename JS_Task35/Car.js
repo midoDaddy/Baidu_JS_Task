@@ -1,9 +1,14 @@
 /*
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
-* @Last Modified by:   63431
-* @Last Modified time: 2017-08-20 22:04:01
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-21 15:42:37
 */
+
+
+function $(id) {
+    return document.getElementById(id);
+}
 
 //合并对象
 function extend(obj1, obj2) {
@@ -29,7 +34,7 @@ function Car(cfg) {
         startX: 1,
         startY: 1,
         startDeg: 0,
-        errorTip: '已经到达边界，不能继续前进'
+        errorTip: '目的地超出边界，无法继续前进'
     };
     this.CFG = extend(this.cfg, cfg);
     this.init();   
@@ -106,44 +111,52 @@ Car.prototype = {
     //向右移动N格
     goRight: function(n) {
         var left = parseInt(this.obj.style.left, 10),
-            N = n || 1;
-        if (left >= 450) {
-            alert(this.cfg.errorTip);
+            N = n || 1,
+            dest = left + 50*N;
+        if (dest > 450) {
+            this.obj.style.left = '450px';
+            this.showErrorTip();
         } else {
-            this.obj.style.left = (left + 50*N) + 'px';
+            this.obj.style.left = dest + 'px';
         }
     },
 
     //向左移动N格
     goLeft: function(n) {
         var left = parseInt(this.obj.style.left, 10),
-            N = n || 1;
-        if (left <= 0) {
-            alert(this.cfg.errorTip);
+            N = n || 1,
+            dest = left - 50*N;
+        if (dest < 0) {
+            this.obj.style.left = 0;
+            this.showErrorTip();
         } else {
-            this.obj.style.left = (left - 50*N) + 'px';
+            this.obj.style.left = dest + 'px';
         }
     },
 
     //向上移动N格
     goTop: function(n) {
         var top = parseInt(this.obj.style.top, 10),
-            N = n || 1;
-        if (top <= 0) {
-            alert(this.cfg.errorTip);
+            N = n || 1,
+            dest = top - 50*N;
+        if (dest < 0) {
+            this.obj.style.top = 0;
+            this.showErrorTip();
         } else {
-            this.obj.style.top = (top - 50*N) + 'px';
+            this.obj.style.top = dest + 'px';
         }
     },
 
     //向下移动N格
     goBottom: function(n) {
         var top = parseInt(this.obj.style.top, 10),
-            N = n || 1;
-        if (top >= 450) {
-            alert(this.cfg.errorTip);
+            N = n || 1,
+            dest = top + 50*N;
+        if (dest > 450) {
+            this.obj.style.top = '450px';
+            this.showErrorTip();
         } else {
-            this.obj.style.top = (top + 50*N) + 'px';
+            this.obj.style.top = dest + 'px';
         }
     },
     
@@ -161,34 +174,38 @@ Car.prototype = {
 
     //转向左侧，并向左侧移动一格
     moveLeft: function(n) {
-        var targetDeg = this.turnDegTo(-90, 270),
-            N = n || 1;
+        var targetDeg = this.turnDegTo(-90, 270);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
-        this.goLeft(N);
+        this.goLeft(n);
     },
 
     //转向上方，并向上移动一格
     moveTop: function(n) {
-        var targetDeg = this.turnDegTo(0, -0),
-            N = n || 1;
+        var targetDeg = this.turnDegTo(0, -0);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
-        this.goTop(N);
+        this.goTop(n);
     },
 
     //转向右侧，并向右侧移动一格
     moveRight: function(n) {
-        var targetDeg = this.turnDegTo(90, -270),
-            N = n || 1;
+        var targetDeg = this.turnDegTo(90, -270);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
-        this.goRight(N);
+        this.goRight(n);
     },
 
     //转向下方，并向下移动一格
     moveBottom: function(n) {
-        var targetDeg = this.turnDegTo(180, -180),
-            N = n || 1;
+        var targetDeg = this.turnDegTo(180, -180);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
-        this.goBottom(N);
+        this.goBottom(n);
+    },
+
+    //提示错误信息
+    showErrorTip: function() {
+        var msg = this.cfg.errorTip;
+        setTimeout(function() {
+            alert(msg)
+        }, 1000);   
     }
     
 }
