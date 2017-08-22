@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-08 22:02:21
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-22 18:06:16
+* @Last Modified time: 2017-08-22 23:13:56
 */
 
 'use strict';
@@ -33,7 +33,7 @@
         });      
         var wall = new Wall({
             container: $('table-wrapper'),
-            targetCar: car
+            relatedCar: car
         });
         var orderInput = new OrderInput({
             inputBox: $('order-input-box'),

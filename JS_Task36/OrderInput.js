@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-22 18:01:02
+* @Last Modified time: 2017-08-22 23:23:24
 */
 
 
@@ -70,9 +70,10 @@ OrderInput.prototype = {
     checkOrder: function(value) {
         var cfg = this.CFG,
             replacedValue = value.replace(/\s[1-9]$/, ''),
-            pattern = /^BRU\s#([0-9a-f]{3}){1,2}$/;
-        if (cfg.validOrder.noNum.indexOf(value) > -1 || cfg.validOrder.withNum.indexOf(replacedValue) > -1 
-            || pattern.test(value)) {
+            pattern = /^BRU\s#([0-9a-f]{3}){1,2}$/i,
+            noNumFlag = cfg.validOrder.noNum.indexOf(value.toUpperCase()) > -1,
+            withNumFlag = cfg.validOrder.withNum.indexOf(replacedValue.toUpperCase()) > -1;
+        if (noNumFlag || withNumFlag || pattern.test(value)) {
             return true;
         } else {
             return false;
@@ -82,18 +83,24 @@ OrderInput.prototype = {
     //获取指令参数：类型与格数
     getOrderParam: function(order) {
         var orderCount = 1,
-            orderType = order.replace(/\s[1-9]$/, '').replace(/\s#([0-9a-f]{3}){1,2}$/, '');           
+            orderType = order.replace(/\s[1-9]$/, '')
+                        .replace(/\s#([0-9A-Fa-f]{3}){1,2}$/, '')
+                        .toUpperCase();           
         if (/\s[1-9]$/.test(order)) {
             orderCount = parseInt(order.slice(-1), 10);
         } 
-        return [orderType, orderCount];
+        return {
+            type: orderType, 
+            count: orderCount
+        };
     },
 
     //根据指令执行相应函数
     runOrder: function(order) {
-        var cfg = this.CFG;
-            orderType =  this.getOrderParam(order)[0],
-            orderCount = this.getOrderParam(order)[1];
+        var cfg = this.CFG,
+            orderParam = this.getOrderParam(order),
+            orderType =  orderParam.type,
+            orderCount = orderParam.count;
         switch(orderType) {
             case 'GO': cfg.targetCar.goForward(orderCount);
                 break;
@@ -129,12 +136,12 @@ OrderInput.prototype = {
     //依次执行指令序列
     runOrderGroup: function() {
         var orderArr = this.inputBox.value.split('\n'),
-            that = this;
+            self = this;
         this.clearErrorTip();
         orderArr.forEach(function(item, index) {
             setTimeout(function(){
-                that.checkOrder(item) ? that.runOrder(item) : that.showErrorTip(index);
-            }, 1000*index)            
+                self.checkOrder(item) ? self.runOrder(item) : self.showErrorTip(index);
+            }, 1000*index);          
         })
     },
 

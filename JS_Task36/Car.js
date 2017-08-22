@@ -2,7 +2,7 @@
 * @Author: 63431
 * @Date:   2017-08-16 15:24:28
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-22 18:01:07
+* @Last Modified time: 2017-08-22 22:45:50
 */
 
 
@@ -161,39 +161,39 @@ Car.prototype = {
     },
     
     //以最少的角度旋转至目标方向
-    turnDegTo: function(target1, target2) {
+    turnDegTo: function(deg1, deg2) {
         var deg = this.getDeg();
         for (var i = -2; i < 2; i++) {
             var targetDeg = deg + 90*i;
-            if (targetDeg % 360 === target1 || targetDeg % 360 === target2) {
+            if (targetDeg % 360 === deg1 || targetDeg % 360 === deg2) {
                 break;
             }
         }
         return targetDeg;
     },
 
-    //转向左侧，并向左侧移动一格
+    //转向左侧，并向左侧移动N格
     moveLeft: function(n) {
         var targetDeg = this.turnDegTo(-90, 270);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
         this.goLeft(n);
     },
 
-    //转向上方，并向上移动一格
+    //转向上方，并向上移动N格
     moveTop: function(n) {
         var targetDeg = this.turnDegTo(0, -0);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
         this.goTop(n);
     },
 
-    //转向右侧，并向右侧移动一格
+    //转向右侧，并向右侧移动N格
     moveRight: function(n) {
         var targetDeg = this.turnDegTo(90, -270);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
         this.goRight(n);
     },
 
-    //转向下方，并向下移动一格
+    //转向下方，并向下移动N格
     moveBottom: function(n) {
         var targetDeg = this.turnDegTo(180, -180);
         this.obj.style.transform = 'rotate(' + targetDeg + 'deg)';
