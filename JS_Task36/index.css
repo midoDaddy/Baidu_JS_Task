@@ -1,0 +1,138 @@
+/*  * @Author: 63431
+* @Date:   2017-08-14 21:07:08
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-21 17:49:50
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    padding: 50px;
+}
+.table-wrapper {
+    position: relative;
+    margin-left: 30px;
+}
+
+.bg-table {
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    border-collapse: collapse;
+    border: 3px solid pink;
+
+}
+.bg-table td {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #ddd;
+}
+
+.list {
+    list-style-type: none;
+    position: absolute;    
+    font-size: 16px;
+    color: #333;
+}
+.num-list-top {
+    top: -30px;
+    left: 0;
+}
+.num-list-top li {
+    float: left;
+    height: 30px;
+    width: 50px;
+    line-height: 30px;
+    text-align: center;
+}
+.num-list-left {
+    top: 0;
+    left: -30px;
+}
+.num-list-left li {
+    height: 50px;
+    width: 30px;
+    line-height: 50px;
+    text-align: left;
+}
+.btn {
+    height: 40px;
+    padding: 0 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    line-height: 40px;
+    color: #fff;
+    border: none;
+    outline: none;
+    background: pink;
+    vertical-align: top;
+    cursor: pointer;
+}
+.btn:hover {
+    background: tomato;
+}
+
+.order-wrapper {
+    position: absolute;
+    top: 225px;
+    left: 550px;
+    
+}
+.order-box-wrapper {
+    position: relative;    
+    height: 220px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+.order-input-box {    
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-left: 30px;
+    font-size: 14px;
+    line-height: 20px;
+    color: green;
+    border: none;
+    background: #000; 
+    outline: none;
+}
+.order-index-list {
+    list-style-type: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;   
+    padding: 10px 1px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    background: #ccc;
+}
+.order-index-list li {
+    height: 20px;
+    width: 20px;
+}
+.order-index-list li.error {
+    background: red;
+    border-radius: 100%;
+}
+
+.car {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 38px;
+    background: tomato;
+    border-top: 10px solid green;
+    transition: all 1s;
+}
+.wall {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background: #ccc;
+}
