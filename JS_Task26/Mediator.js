@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:05
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-23 23:25:27
+* @Last Modified time: 2017-08-24 00:39:44
 */
 var Mediator = function() {
     this.receivers = [];

@@ -2,12 +2,11 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-23 23:29:43
+* @Last Modified time: 2017-08-24 00:46:48
 */
 var Ship = function(cfg) {
     this.cfg = {
         id: 'ship-1',
-        index: 1,
         radius: 150,
         container: $('#planet'),
         energyLeft: 1,
@@ -62,7 +61,7 @@ Ship.prototype = {
         var CFG = this.CFG,
             progressWidth = this.shipObj.width()*(this.energyLeft);
         this.progressBar.width(progressWidth);
-        this.infoTxt.text(CFG.index + '号船-' + Math.round(this.energyLeft*100) + '%');
+        this.infoTxt.text(CFG.id.replace('ship-', '') + '号船-' + Math.round(this.energyLeft*100) + '%');
     },
 
     //开始运行
@@ -107,7 +106,7 @@ Ship.prototype = {
     receive: function(msg) {
         var id = msg.id,
             command = msg.command;
-        if (id !== this.CFG.id) {
+        if (id === this.CFG.id) {
             switch(command) {
                 case 'stop': this.stop();
                     break;

@@ -11,27 +11,16 @@
             <div class="planet" id="planet">
             </div>            
         </div>
-        <div class="command-wrapper">
-            <div class="command-item" id="ship-1-command">
-                <span class="command-item-label">对1号飞船下达命令：</span>
-                <div class="btn start">开始飞行</div>
-                <div class="btn stop">停止飞行</div>
-                <div class="btn destroy">销毁</div>
-            </div>
-            <div class="command-item" id="ship-2-command">
-                <span class="command-item-label">对2号飞船下达命令：</span>
-                <div class="btn start">开始飞行</div>
-                <div class="btn stop">停止飞行</div>
-                <div class="btn destroy">销毁</div>
-            </div>
+        <div class="command-wrapper" id="command-wrapper">
             <div class="command-item">
-                <div class="btn">新的飞船起飞</div>
+                <div class="btn new">新的飞船起飞</div>
             </div>
         </div>
     </div>
     
     
     <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="Mediator.js"></script>
     <script src="Commander.js"></script>
     <script src="Ship.js"></script>
     <script src="index.js"></script>
