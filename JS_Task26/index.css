@@ -1,0 +1,86 @@
+/*
+* @Author: midoDaddy
+* @Date:   2017-08-23 11:23:42
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-23 17:11:02
+*/
+* {
+    margin: 0;;
+    padding: 0;
+}
+.wrapper {
+    width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+}
+.universe-wrapper {
+    padding: 130px 0;
+    margin-bottom: 20px;
+    background: #111;
+}
+.planet {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    background: tomato;
+    border-radius: 100%;
+}
+.ship {
+    position: absolute;
+    width: 80px;
+    height: 30px;
+    margin-left: -40px;
+    margin-top: -15px;    
+    background: #aaa;
+    border-radius: 15px; 
+    overflow: hidden;   
+}
+.ship div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 64px;
+    border-radius: 15px;
+    background: tomato;
+}
+.ship span {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 30px;
+    font-size: 11px;
+    line-height: 30px;
+    text-align: center;
+}
+.command-wrapper {
+    padding: 10px;
+    text-align: center;
+    border: 2px solid #111;
+}
+.command-item {
+    margin: 15px;
+}
+.command-item-label {
+    margin-right: 10px;
+    font-size: 16px;
+    line-height: 30px;
+}
+.btn {
+    display: inline-block;
+    padding: 0 15px;
+    height: 30px;
+    margin-right: 10px;
+    font-size: 14px;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.btn:hover {
+    border-color: tomato;
+    color: tomato;
+}
