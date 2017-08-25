@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:23:42
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 14:33:39
+* @Last Modified time: 2017-08-25 17:21:31
 */
 * {
     margin: 0;;
@@ -17,6 +17,7 @@
     position: relative;
     height: 600px;
     width: 600px;
+    margin-bottom: 20px;
     background: #111;
 }
 .planet {
@@ -96,7 +97,7 @@
     height: 280px;
     margin-bottom: 20px;
     text-align: left;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .log-item {
     margin: 5px 0;

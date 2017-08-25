@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:05
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 14:32:28
+* @Last Modified time: 2017-08-25 17:16:29
 */
 var Mediator = function() {
     this.receivers = [];
@@ -26,6 +26,11 @@ Mediator.prototype = {
 
     //接收信号
     receive: function(msg) {
+        this.addLog({
+            from: 'Commander',
+            type: msg.command,
+            id: msg.id,
+        })
         this.send(msg);
     },
 
@@ -33,27 +38,29 @@ Mediator.prototype = {
     send: function(msg) {
         var self = this,
             random = Math.random();
-        if (random >= 0.3) {
-            if (msg.command === 'new') {                
-                this.register(msg.id);
-            }   
-            setTimeout(function(){
+        setTimeout(function(){
+            if (random >= 0.3) {
+                if (msg.command === 'new') {                
+                    self.register(msg.id);
+                }                   
                 self.receivers.forEach(function(item) {
                     item.receive(msg);
+                });                
+                self.addLog({
+                    from: 'Mediator',
+                    id: msg.id,
+                    type: msg.command,
+                    status: 'success'
                 });
-            }, 1000)
-            this.addLog({
-                id: msg.id,
-                type: msg.command,
-                status: 'success'
-            });
-        } else {
-            this.addLog({
-                id: msg.id,
-                type: msg.command,
-                status: 'error'
-            });
-        }        
+            } else {
+                self.addLog({
+                    from: 'Mediator',
+                    id: msg.id,
+                    type: msg.command,
+                    status: 'error'
+                });
+            }
+        }, 1000);  
     },
 
     //添加log
@@ -64,14 +71,20 @@ Mediator.prototype = {
 
     //渲染log
     renderLog: function() {
-        var html = '';
+        var html = '',
+            content = '';
         this.logData.forEach(function(item, index){
-            if (item.status === 'success') {
-                html += '<li class="log-item success">' + item.id + ': ' + item.type + '命令发送成功</li>';
+            var shipNo = item.id.replace('ship-', ''),
+                publicMsg = item.from + ': ' + shipNo + '号船' + item.type;
+            if (item.from === 'Commander') {
+                html += '<li class="log-item">' + publicMsg + '命令发送成功</li>';
+            } else if (item.status === 'success') {
+                html += '<li class="log-item success">' + publicMsg + '命令传输成功</li>';
             } else {
-                html += '<li class="log-item error">' + item.id + ': ' + item.type + '命令发送失败</li>';
+                html += '<li class="log-item error">' + publicMsg + '命令丢包，传输失败</li>';
             }
         });
         this.logContainer.html(html);
+        this.logContainer.scrollTop(this.logContainer[0].scrollHeight);
     }
 }

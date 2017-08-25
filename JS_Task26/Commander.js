@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:31
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 11:18:27
+* @Last Modified time: 2017-08-25 17:30:22
 */
 var Commander = function(cfg) {
     this.cfg = {
@@ -91,7 +91,7 @@ Commander.prototype = {
         return $btn.parents('.command-item').attr('id').replace('-commander', '');
     },
 
-    //命令行绑定事件
+    //命令按钮绑定事件
     bindEvent: function() {
         var self = this,
             container = this.CFG.container;

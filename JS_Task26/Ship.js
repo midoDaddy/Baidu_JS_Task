@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 11:51:09
+* @Last Modified time: 2017-08-25 17:24:04
 */
 var Ship = function(cfg) {
     this.cfg = {
@@ -11,7 +11,10 @@ var Ship = function(cfg) {
         container: $('#planet'),
         energyLeft: 1,
         startDeg: 0,
-        className: 'ship'
+        className: 'ship',
+        rotateV: 10,
+        energyAddV: 0.02,
+        energyReduceV: 0.03 
     }
     this.CFG = $.extend(this.cfg, cfg);
     this.energyLeft = this.CFG.energyLeft;
@@ -74,8 +77,8 @@ Ship.prototype = {
         }
         this.stopTimer && clearInterval(this.stopTimer);
         this.goTimer = setInterval(function(){
-            self.deg = self.deg + 0.2;
-            self.energyLeft = self.energyLeft - 0.0006;
+            self.deg = self.deg + CFG.rotateV/50;
+            self.energyLeft = self.energyLeft - (CFG.energyReduceV - CFG.energyAddV)/50;
             self.updatePos();
             self.updateEnergyInfo();
             if (self.energyLeft < 0) {
@@ -95,7 +98,7 @@ Ship.prototype = {
         }
         this.goTimer && clearInterval(this.goTimer);
         this.stopTimer = setInterval(function() {
-            self.energyLeft = self.energyLeft + 0.002;
+            self.energyLeft = self.energyLeft + self.CFG.energyAddV/10;
             self.updateEnergyInfo();
             if (self.energyLeft > 1) {
                 self.energyLeft = 1;
