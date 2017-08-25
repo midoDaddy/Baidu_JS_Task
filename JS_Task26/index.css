@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:23:42
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 17:21:31
+* @Last Modified time: 2017-08-25 19:58:08
 */
 * {
     margin: 0;;
@@ -10,6 +10,8 @@
 }
 .wrapper {
     padding: 30px;
+    width: 1100px;
+    margin: 0 auto;
     overflow: hidden;
 }
 .universe-wrapper {
@@ -69,7 +71,6 @@
     left: 0;
     height: 30px;
     width: 64px;
-    border-radius: 15px;
     background: tomato;
 }
 .ship span {
