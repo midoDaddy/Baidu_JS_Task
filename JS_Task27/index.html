@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>IFE JavaScript Task 27</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+<body>
+    <div class="wrapper">
+        <div class="universe-wrapper">
+            <div class="track track-1"></div>
+            <div class="track track-2"></div>
+            <div class="track track-3"></div>
+            <div class="track track-4"></div>
+            <div class="planet" id="planet"></div>            
+        </div>
+        <ul class="log-list" id="log-list"></ul>
+        <div class="command-wrapper others" id="command-wrapper-others"></div>
+        <div class="command-wrapper new" id="command-wrapper-new">
+            <div class="command-item">
+                <span class="command-item-label">动力系统选择：</span>
+                <label>
+                    <input type="radio" name='power-system-select' value="power-system-1">
+                    <span class="command-item-label">前进号（速率30px/s，能耗5%/s）</span>
+                </label>
+                <label>
+                    <input type="radio" name='power-system-select' value="power-system-2">
+                    <span class="command-item-label">奔腾号（速率50px/s，能耗7%/s）</span>
+                </label>
+                <label>
+                    <input type="radio" name='power-system-select' value="power-system-3">
+                    <span class="command-item-label">超越号（速率80px/s，能耗9%/s）</span>
+                </label>               
+            </div>
+            <div class="command-item">
+                <span class="command-item-label">能源系统选择：</span>
+                <label>
+                    <input type="radio" name='power-system-select' value="power-system-1">
+                    <span class="command-item-label">劲量型（能源补充速速2%/s）</span>
+                </label>
+                <label>
+                    <input type="radio" name='power-system-select' value="power-system-2">
+                    <span class="command-item-label">光能型（能源补充速速3%/s）</span>
+                </label>
+                <label>
+                    <input type="radio" name='power-system-select' value="power-system-3">
+                    <span class="command-item-label">永久型（能源补充速速4%/s）</span>
+                </label>               
+            </div>
+            <div class="command-item">
+                <div class="btn new">创建新飞船</div>
+            </div>
+        </div>
+        
+
+    </div>
+    
+    
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="Mediator.js"></script>
+    <script src="Commander.js"></script>
+    <script src="Ship.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
+
+
