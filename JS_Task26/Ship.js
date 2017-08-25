@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 17:24:04
+* @Last Modified time: 2017-08-25 17:44:48
 */
 var Ship = function(cfg) {
     this.cfg = {
@@ -12,9 +12,9 @@ var Ship = function(cfg) {
         energyLeft: 1,
         startDeg: 0,
         className: 'ship',
-        rotateV: 10,
-        energyAddV: 0.02,
-        energyReduceV: 0.03 
+        speed: 10,
+        energyAddRate: 0.02,
+        energyReduceRate: 0.03 
     }
     this.CFG = $.extend(this.cfg, cfg);
     this.energyLeft = this.CFG.energyLeft;
@@ -69,7 +69,8 @@ Ship.prototype = {
     //开始运行
     go: function() {
         var CFG = this.CFG,
-            self = this;
+            self = this,
+            degSpeed = CFG.speed*360/(2*Math.PI*CFG.radius);
         if (this.state === 'go') {
             return;
         } else {
@@ -77,8 +78,8 @@ Ship.prototype = {
         }
         this.stopTimer && clearInterval(this.stopTimer);
         this.goTimer = setInterval(function(){
-            self.deg = self.deg + CFG.rotateV/50;
-            self.energyLeft = self.energyLeft - (CFG.energyReduceV - CFG.energyAddV)/50;
+            self.deg = self.deg + CFG.speed/50;
+            self.energyLeft = self.energyLeft - (CFG.energyReduceRate - CFG.energyAddRate)/50;
             self.updatePos();
             self.updateEnergyInfo();
             if (self.energyLeft < 0) {
@@ -98,7 +99,7 @@ Ship.prototype = {
         }
         this.goTimer && clearInterval(this.goTimer);
         this.stopTimer = setInterval(function() {
-            self.energyLeft = self.energyLeft + self.CFG.energyAddV/10;
+            self.energyLeft = self.energyLeft + self.CFG.energyAddRate/10;
             self.updateEnergyInfo();
             if (self.energyLeft > 1) {
                 self.energyLeft = 1;
