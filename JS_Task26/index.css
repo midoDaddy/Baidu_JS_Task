@@ -2,29 +2,55 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:23:42
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-23 17:11:02
+* @Last Modified time: 2017-08-25 14:33:39
 */
 * {
     margin: 0;;
     padding: 0;
 }
 .wrapper {
-    width: 600px;
-    margin: 0 auto;
     padding: 30px;
+    overflow: hidden;
 }
 .universe-wrapper {
-    padding: 130px 0;
-    margin-bottom: 20px;
+    float: left;
+    position: relative;
+    height: 600px;
+    width: 600px;
     background: #111;
 }
 .planet {
     position: relative;
     width: 200px;
     height: 200px;
-    margin: 0 auto;
+    margin: 200px;
     background: tomato;
     border-radius: 100%;
+}
+.track {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #ccc;
+    border-radius: 100%;
+    background: transparent;
+}
+.track-1 {
+    width: 280px;
+    height: 280px;
+}
+.track-2 {
+    width: 360px;
+    height: 360px;
+}
+.track-3 {
+    width: 440px;
+    height: 440px;
+}
+.track-4 {
+    width: 520px;
+    height: 520px;
 }
 .ship {
     position: absolute;
@@ -56,26 +82,49 @@
     line-height: 30px;
     text-align: center;
 }
+.log-list, 
 .command-wrapper {
+    float: left;
+    width: 400px;
+    margin-left: 20px;
     padding: 10px;
     text-align: center;
-    border: 2px solid #111;
+    border: 2px solid #333;
+}
+.log-list {
+    list-style-type: none;
+    height: 280px;
+    margin-bottom: 20px;
+    text-align: left;
+    overflow: scroll;
+}
+.log-item {
+    margin: 5px 0;
+    font-size: 12px;
+    line-height: 20px;
+    color: #666;
+    text-indent: 20px;
+}
+.log-item.success {
+    color: green;
+}
+.log-item.error {
+    color: red;
 }
 .command-item {
-    margin: 15px;
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 30px;
 }
 .command-item-label {
     margin-right: 10px;
-    font-size: 16px;
-    line-height: 30px;
 }
 .btn {
     display: inline-block;
     padding: 0 15px;
     height: 30px;
     margin-right: 10px;
-    font-size: 14px;
-    line-height: 30px;
+    font-size: 12px;
     border: 1px solid #ccc;
     border-radius: 3px;
     cursor: pointer;

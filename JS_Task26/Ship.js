@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-24 00:46:48
+* @Last Modified time: 2017-08-25 11:51:09
 */
 var Ship = function(cfg) {
     this.cfg = {
@@ -32,8 +32,7 @@ Ship.prototype = {
     //创建新飞船
     create: function() {
         var CFG = this.CFG,
-            infoTxt = CFG.index + '号船' ;
-
+            infoTxt = CFG.index + '号船';
         this.shipObj = $('<div id="' + CFG.id + '"></div>')
             .addClass(CFG.className)
             .appendTo(CFG.container);
@@ -68,25 +67,33 @@ Ship.prototype = {
     go: function() {
         var CFG = this.CFG,
             self = this;
+        if (this.state === 'go') {
+            return;
+        } else {
+            this.state = 'go';
+        }
         this.stopTimer && clearInterval(this.stopTimer);
-        this.state = 'go';
         this.goTimer = setInterval(function(){
-            self.deg = self.deg + 1;
-            self.energyLeft = self.energyLeft - 0.003;
+            self.deg = self.deg + 0.2;
+            self.energyLeft = self.energyLeft - 0.0006;
             self.updatePos();
             self.updateEnergyInfo();
             if (self.energyLeft < 0) {
                 self.energyLeft = 0;
                 self.stop();
             }
-        }, 100);  
+        }, 20);  
     },
 
     //停止运行
     stop: function() {
         var self = this;
+        if (this.state === 'stop') {
+            return;
+        } else {
+            this.state = 'stop';
+        }
         this.goTimer && clearInterval(this.goTimer);
-        this.state = 'stop';
         this.stopTimer = setInterval(function() {
             self.energyLeft = self.energyLeft + 0.002;
             self.updateEnergyInfo();
