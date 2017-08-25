@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:31
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 18:00:01
+* @Last Modified time: 2017-08-25 19:27:31
 */
 var Commander = function(cfg) {
     this.cfg = {
@@ -63,9 +63,14 @@ Commander.prototype = {
             }
         }
         this.renderOrderBox();
+        this.getParam($('.power-system-select:checked').val());
+        this.getParam($('.energy-system-select:checked').val());
         this.send({
             id: 'ship-' + shipNo,
-            command: 'new'
+            command: 'new',
+            speed: this.speed,
+            energyAddRate: this.energyAddRate,
+            energyReduceRate: this.energyReduceRate
         });
     },
 
@@ -87,6 +92,33 @@ Commander.prototype = {
     //获取命令行对应的飞船id
     getShipId: function($btn) {
         return $btn.parents('.command-item').attr('id').replace('-commander', '');
+    },
+
+    //获取配置参数
+    getParam: function(value) {
+        switch(value) {
+            case 'power-system-1': 
+                this.speed = 30;
+                this.energyReduceRate = 0.05;
+                break;
+            case 'power-system-2': 
+                this.speed = 50;
+                this.energyReduceRate = 0.07;
+                break;
+            case 'power-system-3': 
+                this.speed = 80;
+                this.energyReduceRate = 0.09;
+                break;
+            case 'energy-system-1': 
+                this.energyAddRate = 0.02;
+                break;
+            case 'energy-system-2': 
+                this.energyAddRate = 0.03;
+                break;
+            case 'energy-system-3': 
+                this.energyAddRate = 0.04;
+                break;
+        }
     },
 
     //命令按钮绑定事件

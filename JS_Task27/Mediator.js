@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:05
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 17:16:29
+* @Last Modified time: 2017-08-25 19:32:59
 */
 var Mediator = function() {
     this.receivers = [];
@@ -15,11 +15,14 @@ Mediator.prototype = {
     constructor: Mediator,
 
     //注册对象
-    register: function(id) {  
-        var radius = 100 + parseInt(id.replace('ship-', ''), 10)*40;
+    register: function(msg) {  
+        var radius = 100 + parseInt(msg.id.replace('ship-', ''), 10)*40;
         var newShip = new Ship({
-            id: id,
-            radius: radius
+            id: msg.id,
+            radius: radius,
+            speed: msg.speed,
+            energyAddRate: msg.energyAddRate,
+            energyReduceRate: msg.energyReduceRate
         });     
         this.receivers.push(newShip);    
     },
@@ -30,7 +33,7 @@ Mediator.prototype = {
             from: 'Commander',
             type: msg.command,
             id: msg.id,
-        })
+        });
         this.send(msg);
     },
 
@@ -41,7 +44,7 @@ Mediator.prototype = {
         setTimeout(function(){
             if (random >= 0.3) {
                 if (msg.command === 'new') {                
-                    self.register(msg.id);
+                    self.register(msg);
                 }                   
                 self.receivers.forEach(function(item) {
                     item.receive(msg);

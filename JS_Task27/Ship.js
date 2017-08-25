@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 17:44:48
+* @Last Modified time: 2017-08-25 19:39:34
 */
 var Ship = function(cfg) {
     this.cfg = {
@@ -78,7 +78,7 @@ Ship.prototype = {
         }
         this.stopTimer && clearInterval(this.stopTimer);
         this.goTimer = setInterval(function(){
-            self.deg = self.deg + CFG.speed/50;
+            self.deg = self.deg + degSpeed/50;
             self.energyLeft = self.energyLeft - (CFG.energyReduceRate - CFG.energyAddRate)/50;
             self.updatePos();
             self.updateEnergyInfo();
