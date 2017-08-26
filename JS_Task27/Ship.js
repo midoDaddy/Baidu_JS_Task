@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 19:39:34
+* @Last Modified time: 2017-08-26 09:48:22
 */
 var Ship = function(cfg) {
     this.cfg = {
@@ -12,10 +12,11 @@ var Ship = function(cfg) {
         energyLeft: 1,
         startDeg: 0,
         className: 'ship',
-        speed: 10,
+        speed: 50,
         energyAddRate: 0.02,
         energyReduceRate: 0.03 
-    }
+    } 
+    cfg = this.adapter(cfg);
     this.CFG = $.extend(this.cfg, cfg);
     this.energyLeft = this.CFG.energyLeft;
     this.deg = this.CFG.startDeg;
@@ -113,9 +114,70 @@ Ship.prototype = {
         this.shipObj.remove();
     },
 
+    //二进制数据格式转化为JSON格式
+    adapter: function(msg) {
+        if (typeof msg !== 'string') {
+            return false;
+        }
+        var id, command, speed, energyReduceRate, energyAddRate;
+        switch(msg.slice(0, 4)) {
+            case '0001': id = 'ship-1';
+                break;
+            case '0010': id = 'ship-2';
+                break;
+            case '0011': id = 'ship-3';
+                break;
+            case '0100': id = 'ship-4';
+                break;
+        }
+        switch(msg.slice(4, 8)) {
+            case '0001': command = 'new';
+                break;
+            case '0010': command = 'start';
+                break;
+            case '0011': command = 'stop';
+                break;
+            case '0100': command = 'destroy';
+                break;
+        }
+        switch(msg.slice(8, 12)) {
+            case '0001': speed = 30;
+                break;
+            case '0010': speed = 50;
+                break;
+            case '0011': speed = 80;
+                break;
+        }
+        switch(msg.slice(12, 16)) {
+            case '0001': energyReduceRate = 0.05;
+                break;
+            case '0010': energyReduceRate = 0.07;
+                break;
+            case '0011': energyReduceRate = 0.09;
+                break;
+        }
+        switch(msg.slice(16, 20)) {
+            case '0001': energyAddRate = 0.02;
+                break;
+            case '0010': energyAddRate = 0.03;
+                break;
+            case '0011': energyAddRate = 0.04;
+                break;
+        }
+        return {
+            id: id,
+            command: command,
+            speed: speed,
+            energyReduceRate: energyReduceRate,
+            energyAddRate: energyAddRate,
+            radius: 100 + parseInt(msg.slice(0, 4), 2)*40
+        }
+    },
+
     //信号接收
-    receive: function(msg) {
-        var id = msg.id,
+    receive: function(data) {
+        var msg = this.adapter(data),
+            id = msg.id,
             command = msg.command;
         if (id === this.CFG.id) {
             switch(command) {

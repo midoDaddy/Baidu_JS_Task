@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:31
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-25 19:27:31
+* @Last Modified time: 2017-08-26 09:55:56
 */
 var Commander = function(cfg) {
     this.cfg = {
@@ -44,9 +44,10 @@ Commander.prototype = {
 
     //发送信号
     send: function(msg) {
-        this.CFG.receiver.receive(msg);
+        console.log(this.adapter(msg))
+        this.CFG.receiver.receive(this.adapter(msg));
     },
-    
+  
     //创建新飞船命令
     orderNew: function() {       
         var shipNo = 1,
@@ -119,6 +120,69 @@ Commander.prototype = {
                 this.energyAddRate = 0.04;
                 break;
         }
+    },
+
+    //将JSON数据转化为二进制格式
+    adapter: function(data) {
+        var msg = '';
+        if (typeof data !== 'object') {
+            return false;
+        }
+        switch(data.id) {
+            case 'ship-1': msg += '0001';
+                break;
+            case 'ship-2': msg += '0010';
+                break;
+            case 'ship-3': msg += '0011';
+                break;
+            case 'ship-4': msg += '0100';
+                break;
+            default: msg += '0000';
+                break;
+        }
+        switch(data.command) {
+            case 'new': msg += '0001';
+                break;
+            case 'start': msg += '0010';
+                break;
+            case 'stop': msg += '0011';
+                break;
+            case 'destroy': msg += '0100';
+                break;
+            default: msg += '0000';
+                break;
+        }
+        switch(data.speed) {
+            case 30: msg += '0001';
+                break;
+            case 50: msg += '0010';
+                break;
+            case 80: msg += '0011';
+                break;
+            default: msg += '0000';
+                break;
+        }
+        switch(data.energyReduceRate) {
+            case 0.05: msg += '0001';
+                break;
+            case 0.07: msg += '0010';
+                break;
+            case 0.09: msg += '0011';
+                break;
+            default: msg += '0000';
+                break;
+        }
+        switch(data.energyAddRate) {
+            case 0.02: msg += '0001';
+                break;
+            case 0.03: msg += '0010';
+                break;
+            case 0.04: msg += '0011';
+                break;
+            default: msg += '0000';
+                break;
+        }
+        return msg;
     },
 
     //命令按钮绑定事件
