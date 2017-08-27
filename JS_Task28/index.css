@@ -1,0 +1,177 @@
+/*
+* @Author: midoDaddy
+* @Date:   2017-08-23 11:23:42
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-27 23:20:58
+*/
+* {
+    margin: 0;;
+    padding: 0;
+}
+.wrapper {
+    padding: 30px;
+    width: 1150px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.universe-wrapper {
+    float: left;
+    position: relative;
+    height: 600px;
+    width: 600px;
+    margin-bottom: 20px;
+    background: #111;
+}
+
+.planet {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 200px;
+    background: tomato;
+    border-radius: 100%;
+}
+.track {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #ccc;
+    border-radius: 100%;
+    background: transparent;
+}
+.track-1 {
+    width: 280px;
+    height: 280px;
+}
+.track-2 {
+    width: 360px;
+    height: 360px;
+}
+.track-3 {
+    width: 440px;
+    height: 440px;
+}
+.track-4 {
+    width: 520px;
+    height: 520px;
+}
+
+.ship {
+    position: absolute;
+    width: 80px;
+    height: 30px;
+    margin-left: -40px;
+    margin-top: -15px;    
+    background: #aaa;
+    border-radius: 15px; 
+    overflow: hidden;   
+}
+.ship div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 64px;
+    background: tomato;
+}
+.ship span {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 30px;
+    font-size: 11px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.ship-info-wrapper {
+    float: left;
+    margin-left: 20px;
+    margin-bottom: 15px;
+    border: 2px solid #333;
+}
+.ship-info-table {
+    width: 480px;
+    font-size: 13px;
+    line-height: 40px;
+    text-align: center; 
+    border-collapse: collapse;     
+}
+.ship-info-table th {
+    background: #eee;
+}
+.ship-info-table td {
+}
+
+.log-list,
+.command-wrapper.others {
+    float: left;
+    width: 450px; 
+    margin-left: 20px;
+    margin-bottom: 15px;
+    padding: 0 15px;   
+    border: 2px solid #333;   
+}
+
+.command-wrapper.others {
+    height: 200px; 
+    text-align: center;
+}
+
+.log-list {
+    height: 130px;
+    padding: 15px;  
+    text-align: left;
+    overflow-y: scroll; 
+    list-style-type: none; 
+}
+.log-item {
+    margin: 5px 0;
+    font-size: 12px;
+    line-height: 20px;
+    color: #666;
+    text-indent: 20px;
+}
+.log-item.success {
+    color: green;
+}
+.log-item.error {
+    color: red;
+}
+
+
+.command-wrapper.new {
+    width: 1050px;
+    padding: 10px 0;
+    padding-left: 50px;
+    margin-bottom: 20px;
+    clear: both;
+    border: 2px solid #333;
+}
+.command-item {
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 30px;
+}
+.command-item-label {
+    margin-right: 10px;
+    cursor: pointer;
+}
+.btn {
+    display: inline-block;
+    padding: 0 15px;
+    height: 30px;
+    margin-right: 10px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.btn:hover {
+    border-color: tomato;
+    color: tomato;
+}
+
