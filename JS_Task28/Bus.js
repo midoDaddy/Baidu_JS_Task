@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:05
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-26 09:46:42
+* @Last Modified time: 2017-08-28 22:31:30
 */
 var Bus = function() {
     this.receivers = [];
@@ -21,44 +21,54 @@ Bus.prototype = {
     },
 
     //接收信号
-    receive: function(data) {
-        this.addLog({
-            from: 'Commander',
-            type: data.slice(4, 8),
-            id: data.slice(0, 4),
-        });
-        this.send(data);
+    receive: function(data, from) {
+        if (from === 'ship') {
+            this.send(data, 'commander')
+        } 
+        if (from === 'commander') {
+            this.addLog({
+                from: 'Commander',
+                type: data.slice(4, 8),
+                id: data.slice(0, 4),
+            });
+            this.send(data, 'ship');
+        }       
     },
 
     //发送信号
-    send: function(data) {
+    send: function(data, to) {
         var self = this;
-        var sendRepeator = function(){
-            var random = Math.random();
-            if (random >= 0.1) {
-                if (data.slice(4, 8) === '0001') {                
-                    self.register(data);
-                }                   
-                self.receivers.forEach(function(item) {
-                    item.receive(data);
-                });                
-                self.addLog({
-                    from: 'Bus',
-                    id: data.slice(0, 4),
-                    type: data.slice(4, 8),
-                    status: 'success'
-                });
-            } else {
-                self.addLog({
-                    from: 'Bus',
-                    id: data.slice(0, 4),
-                    type: data.slice(4, 8),
-                    status: 'error'
-                });
-                sendRepeator();
+        if (to === 'ship') {
+            var sendRepeator = function(){
+                var random = Math.random();
+                if (random >= 0.1) {
+                    if (data.slice(4, 8) === '0001') {                
+                        self.register(data);
+                    }                   
+                    self.receivers.forEach(function(item) {
+                        item.receive(data);
+                    });                
+                    self.addLog({
+                        from: 'Bus',
+                        id: data.slice(0, 4),
+                        type: data.slice(4, 8),
+                        status: 'success'
+                    });
+                } else {
+                    self.addLog({
+                        from: 'Bus',
+                        id: data.slice(0, 4),
+                        type: data.slice(4, 8),
+                        status: 'error'
+                    });
+                    sendRepeator();
+                }
             }
+            setTimeout(sendRepeator, 300);  
         }
-        setTimeout(sendRepeator, 300);  
+        if (to === 'commander') {
+            commander.receive(data);
+        }
     },
 
     //添加log
@@ -85,3 +95,5 @@ Bus.prototype = {
         this.logContainer.scrollTop(this.logContainer[0].scrollHeight);
     }
 }
+
+var bus = new Bus();

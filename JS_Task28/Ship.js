@@ -2,26 +2,29 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-27 21:58:25
+* @Last Modified time: 2017-08-28 23:35:47
 */
 var Ship = function(cfg) {
     this.cfg = {
         id: 'ship-1',
         radius: 150,
         container: $('#planet'),
-        receiver: null,
         energyLeft: 1,
         startDeg: 0,
         className: 'ship',
         speed: 50,
         energyAddRate: 0.02,
-        receiver: new Bus(),
+        receiver: bus,
         energyReduceRate: 0.03 
     } 
     cfg = this.receiveAdapter(cfg);
     this.CFG = $.extend(this.cfg, cfg);
-    this.energyLeft = this.CFG.energyLeft;
-    this.deg = this.CFG.startDeg;
+    this.data = {
+        energyLeft: this.CFG.energyLeft,
+        deg: this.CFG.startDeg,
+        id: this.CFG.id,
+        state: 'stop'
+    };
     this.init();
 }
 
@@ -33,12 +36,12 @@ Ship.prototype = {
         this.create();
         this.updateEnergyInfo();
         this.updatePos();
+        this.send();
     },
     
     //创建新飞船
     create: function() {
-        var CFG = this.CFG,
-            infoTxt = CFG.index + '号船';
+        var CFG = this.CFG;
         this.shipObj = $('<div id="' + CFG.id + '"></div>')
             .addClass(CFG.className)
             .appendTo(CFG.container);
@@ -50,7 +53,7 @@ Ship.prototype = {
     updatePos: function() {
         var CFG = this.CFG,
             radius = CFG.radius,
-            deg = this.deg,
+            deg = this.data.deg,
             radian = deg*2*(Math.PI)/360,
             top = 100 - radius*Math.cos(radian) + 'px',
             left = 100 + radius*Math.sin(radian) + 'px';
@@ -64,9 +67,9 @@ Ship.prototype = {
     //更新能源信息
     updateEnergyInfo: function() {
         var CFG = this.CFG,
-            progressWidth = this.shipObj.width()*(this.energyLeft);
+            progressWidth = this.shipObj.width()*(this.data.energyLeft);
         this.progressBar.width(progressWidth);
-        this.infoTxt.text(CFG.id.replace('ship-', '') + '号船-' + Math.round(this.energyLeft*100) + '%');
+        this.infoTxt.text(CFG.id.replace('ship-', '') + '号船-' + Math.round(this.data.energyLeft*100) + '%');
     },
 
     //开始运行
@@ -74,19 +77,19 @@ Ship.prototype = {
         var CFG = this.CFG,
             self = this,
             degSpeed = CFG.speed*360/(2*Math.PI*CFG.radius);
-        if (this.state === 'go') {
+        if (this.data.state === 'go') {
             return;
         } else {
-            this.state = 'go';
+            this.data.state = 'go';
         }
         this.stopTimer && clearInterval(this.stopTimer);
         this.goTimer = setInterval(function(){
-            self.deg = self.deg + degSpeed/50;
-            self.energyLeft = self.energyLeft - (CFG.energyReduceRate - CFG.energyAddRate)/50;
+            self.data.deg = self.data.deg + degSpeed/50;
+            self.data.energyLeft = self.data.energyLeft - (CFG.energyReduceRate - CFG.energyAddRate)/50;
             self.updatePos();
             self.updateEnergyInfo();
-            if (self.energyLeft < 0) {
-                self.energyLeft = 0;
+            if (self.data.energyLeft < 0) {
+                self.data.energyLeft = 0;
                 self.stop();
             }
         }, 20);  
@@ -95,17 +98,17 @@ Ship.prototype = {
     //停止运行
     stop: function() {
         var self = this;
-        if (this.state === 'stop') {
+        if (this.data.state === 'stop') {
             return;
         } else {
-            this.state = 'stop';
+            this.data.state = 'stop';
         }
         this.goTimer && clearInterval(this.goTimer);
         this.stopTimer = setInterval(function() {
-            self.energyLeft = self.energyLeft + self.CFG.energyAddRate/10;
+            self.data.energyLeft = self.data.energyLeft + self.CFG.energyAddRate/10;
             self.updateEnergyInfo();
-            if (self.energyLeft > 1) {
-                self.energyLeft = 1;
+            if (self.data.energyLeft > 1) {
+                self.data.energyLeft = 1;
                 clearInterval(self.stopTimer);
             }
         }, 100);
@@ -113,6 +116,7 @@ Ship.prototype = {
 
     //销毁
     destroy: function() {
+        this.data.state = 'destroy';
         this.shipObj.remove();
     },
 
@@ -192,9 +196,40 @@ Ship.prototype = {
             }
         }
     },
-
+    
+    //JSON格式数据转化为二进制格式
     sendAdapter: function(data) {
+        var msg = '';
+        switch(data.id) {
+            case 'ship-1': msg += '0001';
+                break;
+            case 'ship-2': msg += '0010';
+                break;
+            case 'ship-3': msg += '0011';
+                break;
+            case 'ship-4': msg += '0100';
+                break;
+        }
+        switch(data.state) {
+            case 'go': msg += '0001';
+                break;
+            case 'stop': msg += '0010';
+                break;
+            case 'destroy': msg += '0011';
+                break;
+        }
+        msg += ('00000000' + Math.round(data.energyLeft*100).toString(2)).slice(-8);
+        return msg;
+    },
 
+    //向bus发送数据
+    send: function() {
+        var self = this;
+        setInterval(function(){
+            self.CFG.receiver.receive(self.sendAdapter(self.data), 'ship');
+        }, 1000)        
     }
+
+
 
 }
