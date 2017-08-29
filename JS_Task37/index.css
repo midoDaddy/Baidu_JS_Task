@@ -1,0 +1,96 @@
+/*
+* @Author: midoDaddy
+* @Date:   2017-08-29 16:43:36
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-29 17:41:44
+*/
+.btn {
+    margin: 50px auto;
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+    line-height: 50px;
+    color: tomato;
+    text-align: center;
+    border: 2px solid tomato;
+    background: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn:hover {
+    color: #fff;
+    background: tomato;
+}
+
+.float-layer-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.float-layer-mask {
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+}
+.float-layer-box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    height: 250px;
+    margin-left: -200px;
+    margin-top: -125px;
+    border: 1px solid tomato;
+    border-radius: 5px;
+    background: #fff;
+}
+.float-layer-header {
+    position: relative;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    background: tomato;
+}
+.float-layer-header .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(close.png);
+    background-size: cover;
+    cursor: pointer;
+}
+.float-layer-content {
+    padding: 15px 20px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+.float-layer-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    padding: 0 20px;
+    text-align: right;
+}
+.float-layer-footer .footer-btn {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    margin: 10px;
+    margin-right: 0;
+    font-size: 14px;
+    line-height: 30px;
+    color: #fff;
+    text-align: center;
+    background: tomato;
+    cursor: pointer;
+}
