@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:24:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-28 23:35:47
+* @Last Modified time: 2017-08-29 15:16:24
 */
 var Ship = function(cfg) {
     this.cfg = {
@@ -200,6 +200,9 @@ Ship.prototype = {
     //JSON格式数据转化为二进制格式
     sendAdapter: function(data) {
         var msg = '';
+        if (typeof data !== 'object') {
+            return false;
+        }
         switch(data.id) {
             case 'ship-1': msg += '0001';
                 break;
@@ -224,10 +227,13 @@ Ship.prototype = {
 
     //向bus发送数据
     send: function() {
-        var self = this;
-        setInterval(function(){
+        var self = this;        
+        this.sendTimer = setInterval(function(){
             self.CFG.receiver.receive(self.sendAdapter(self.data), 'ship');
-        }, 1000)        
+            if (self.data.state === 'destroy') {
+                clearInterval(self.sendTimer);
+            }
+        }, 500);                
     }
 
 

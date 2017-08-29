@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-23 11:25:31
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-28 23:35:17
+* @Last Modified time: 2017-08-29 15:17:42
 */
 var Commander = function(cfg) {
     this.cfg = {
@@ -28,7 +28,6 @@ Commander.prototype = {
         this.bindEvent();
     },
     
-
     //创建新的操作命令行
     renderOrderBox: function(id) {
         var html = '',
@@ -43,9 +42,7 @@ Commander.prototype = {
         }
         this.CFG.otherOrderCon.html(html);
     },
-
-    
-  
+ 
     //创建新飞船命令
     orderNew: function() {       
         var shipNo = 1,
@@ -72,31 +69,13 @@ Commander.prototype = {
             energyReduceRate: this.data.energyReduceRate
         });
         this.data.shipData['ship-' + shipNo] = {
-            powerSystem: this.data.powerSystem,
-            energySystem: this.data.energySystem
+            powerSystem: this.data.powerSystem || '默认',
+            energySystem: this.data.energySystem || '默认',
+            state: '',
+            energyLeft: ''
         }
     },
-
-    //销毁飞船命令
-    orderDestroy: function(e) {
-        var self = this,
-            $target = $(e.target),
-            shipId = this.getShipId($target),
-            shipNo = parseInt(shipId.replace('ship-', ''), 10),
-            shipIndex = this.data.shipArr.indexOf(shipNo);
-            this.data.shipArr.splice(shipIndex, 1);
-        this.renderOrderBox();
-        this.send({
-            id: shipId,
-            command: 'destroy'
-        });
-    },
-
-    //获取命令行对应的飞船id
-    getShipId: function($btn) {
-        return $btn.parents('.command-item').attr('id').replace('-commander', '');
-    },
-
+   
     //获取配置参数
     getParam: function(value) {
         switch(value) {
@@ -129,6 +108,27 @@ Commander.prototype = {
                 break;
         }
     },
+
+     //销毁飞船命令
+    orderDestroy: function(e) {
+        var self = this,
+            $target = $(e.target),
+            shipId = this.getShipId($target),
+            shipNo = parseInt(shipId.replace('ship-', ''), 10),
+            shipIndex = this.data.shipArr.indexOf(shipNo);
+        this.data.shipArr.splice(shipIndex, 1);
+        this.renderOrderBox();
+        this.send({
+            id: shipId,
+            command: 'destroy'
+        });
+    },
+
+    //获取命令行对应的飞船id
+    getShipId: function($btn) {
+        return $btn.parents('.command-item').attr('id').replace('-commander', '');
+    },
+
 
     //将JSON数据转化为二进制格式
     sendAdapter: function(data) {
@@ -202,6 +202,9 @@ Commander.prototype = {
     //将二进制格式数据转化为JSON
     receiveAdapter: function(data) {
         var id, state, energyLeft;
+        if (typeof data !== 'string') {
+            return false;
+        }
         switch(data.slice(0, 4)) {
             case '0001': id = 'ship-1';
                 break;
@@ -231,8 +234,15 @@ Commander.prototype = {
     //接收信号
     receive: function(msg) {
         var data = this.receiveAdapter(msg);
-        this.data.shipData[data.id].state = data.state;
-        this.data.shipData[data.id].energyLeft = data.energyLeft;
+        if (data.state === '即将销毁') {
+            delete this.data.shipData[data.id];
+        } else if (this.data.shipData[data.id].state === data.state 
+            && this.data.shipData[data.id].energyLeft === data.energyLeft) {
+            return
+        } else {
+            this.data.shipData[data.id].state = data.state;
+            this.data.shipData[data.id].energyLeft = data.energyLeft;
+        }       
         this.renderShipStatus();
     },
     
