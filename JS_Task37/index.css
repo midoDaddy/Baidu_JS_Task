@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-29 16:43:36
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-29 17:41:44
+* @Last Modified time: 2017-08-29 23:07:38
 */
 .btn {
     margin: 50px auto;
@@ -36,13 +36,7 @@
 }
 .float-layer-box {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 400px;
-    height: 250px;
-    margin-left: -200px;
-    margin-top: -125px;
-    border: 1px solid tomato;
+    border: 1px solid #666;
     border-radius: 5px;
     background: #fff;
 }
@@ -53,7 +47,7 @@
     font-size: 16px;
     line-height: 40px;
     text-align: center;
-    background: tomato;
+    background: #666;
 }
 .float-layer-header .close-btn {
     position: absolute;
@@ -91,6 +85,17 @@
     line-height: 30px;
     color: #fff;
     text-align: center;
-    background: tomato;
+    background: #666;
     cursor: pointer;
+}
+
+/* tomato主题样式 */
+.float-layer-wrapper.tomato .float-layer-box {
+    border-color: tomato;
+}
+.float-layer-wrapper.tomato .float-layer-header {
+    background: tomato;
+}
+.float-layer-wrapper.tomato .footer-btn {
+    background: tomato;
 }
