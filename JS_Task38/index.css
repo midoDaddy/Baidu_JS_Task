@@ -1,0 +1,43 @@
+/*
+* @Author: midoDaddy
+* @Date:   2017-08-30 16:54:01
+* @Last Modified by:   midoDaddy
+* @Last Modified time: 2017-08-30 23:30:03
+*/
+ * {
+    margin: 0;
+    padding: 0;
+ }
+.wrapper {
+    margin: 30px;
+}
+.sort-table {
+    text-align: center;
+    border-collapse: collapse;
+}
+.sort-table th {
+    position: relative;
+    color: #fff;
+    background: #333;
+    border: 1px solid #ccc;
+}
+.sort-table td {
+    border: 1px solid #ccc;
+}
+
+.sort-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    margin-top: -8px;
+    width: 16px;
+    height: 16px;
+    background: url('sort.png');
+    background-size: cover;
+    cursor: pointer;
+}
+
+/* toamto主题 */
+.sort-table.tomato th {
+    background: tomato;
+}
