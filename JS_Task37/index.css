@@ -2,8 +2,11 @@
 * @Author: midoDaddy
 * @Date:   2017-08-29 16:43:36
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-29 23:07:38
+* @Last Modified time: 2017-08-30 15:48:36
 */
+body {
+    user-select: none;
+}
 .btn {
     margin: 50px auto;
     width: 200px;
@@ -22,6 +25,7 @@
     background: tomato;
 }
 
+/* 浮出层 */
 .float-layer-wrapper {
     position: fixed;
     top: 0;
@@ -48,6 +52,7 @@
     line-height: 40px;
     text-align: center;
     background: #666;
+    cursor: pointer;
 }
 .float-layer-header .close-btn {
     position: absolute;
@@ -88,6 +93,70 @@
     background: #666;
     cursor: pointer;
 }
+
+/* 角缩放控件 */
+ul {
+    list-style-type: none;
+}
+.corner-zoom-item {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+}
+.corner-zoom-item.left-top {
+    left: -4px;
+    top: -4px;
+    cursor: nw-resize;
+}
+.corner-zoom-item.right-top {
+    right: -4px;
+    top: -4px;
+    cursor: ne-resize;
+}
+.corner-zoom-item.right-bottom {
+    right: -4px;
+    bottom: -4px;
+    cursor: se-resize;
+}
+.corner-zoom-item.left-bottom {
+    left: -4px;
+    bottom: -4px;
+    cursor: sw-resize;
+}
+
+/* 边缩放控件 */
+.border-zoom-item {
+    position: absolute;
+}
+.border-zoom-item.left,
+.border-zoom-item.right {
+    width: 9px;
+    top: 4px;
+    bottom: 4px;
+}
+.border-zoom-item.left {
+    left: -4px;
+    cursor: w-resize;
+}
+.border-zoom-item.right {
+    right: -4px;
+    cursor: e-resize;
+}
+.border-zoom-item.top,
+.border-zoom-item.bottom {
+    height: 9px;
+    left: 4px;
+    right: 4px;
+}
+.border-zoom-item.top {
+    top: -4px; 
+    cursor: n-resize;   
+}
+.border-zoom-item.bottom {
+    bottom: -4px;
+    cursor: s-resize;
+}
+
 
 /* tomato主题样式 */
 .float-layer-wrapper.tomato .float-layer-box {
