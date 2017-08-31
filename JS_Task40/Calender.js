@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-31 22:16:43
+* @Last Modified time: 2017-08-31 23:46:28
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -21,18 +21,11 @@ Calender.prototype = {
     
     //初始化
     init: function() {
-        this.initData();
+        var curDate = this.CFG.currentDate;
+        this.updateCurrentDate(curDate);
         this.renderUI();
+        this.setDate(curDate);
         this.bindEvent();        
-    },
-    
-    //初始化数据
-    initData: function() {
-        var CFG = this.CFG;
-        this.data.year = CFG.currentDate.getFullYear();
-        this.data.month = CFG.currentDate.getMonth();
-        this.data.date = CFG.currentDate.getDate();
-        this.getMonthData();
     },
     
     //渲染日历UI
@@ -48,40 +41,46 @@ Calender.prototype = {
         var CFG = this.CFG,
             month = this.data.month + 1,
             year = this.data.year;
-        if (!this.header) {
-           this.header = $('<div class="calender-header"></div>').appendTo(this.wrapper)
-            .html(  '<i class="iconfont icon-return"></i>' + 
-                    '<div class="input-item-wrapper">' +
-                        '<input type="text" id="month-input" class="input-item" value="' + month + '月">' +
-                        '<div class="controller-wrapper">' +
-                            '<i class="iconfont icon-packup"></i>' +
-                            '<i class="iconfont icon-unfold"></i>' +                       
-                        '</div>' +
+
+       this.header = $('<div class="calender-header"></div>').appendTo(this.wrapper)
+        .html(  '<i class="iconfont icon-return"></i>' + 
+                '<div class="input-item-wrapper">' +
+                    '<input type="text" id="month-input" class="input-item" value="' + month + '月">' +
+                    '<div class="controller-wrapper">' +
+                        '<i class="iconfont icon-packup"></i>' +
+                        '<i class="iconfont icon-unfold"></i>' +                       
                     '</div>' +
-                    '<div class="input-item-wrapper">' +
-                        '<input type="text" id="year-input" class="input-item" value="' + year + '年">' +
-                        '<div class="controller-wrapper">' +
-                            '<i class="iconfont icon-packup"></i>' +
-                            '<i class="iconfont icon-unfold"></i>' +
-                        '</div>' +
+                '</div>' +
+                '<div class="input-item-wrapper">' +
+                    '<input type="text" id="year-input" class="input-item" value="' + year + '年">' +
+                    '<div class="controller-wrapper">' +
+                        '<i class="iconfont icon-packup"></i>' +
+                        '<i class="iconfont icon-unfold"></i>' +
                     '</div>' +
-                    '<i class="iconfont icon-enter"></i>');
-        }        
+                '</div>' +
+                '<i class="iconfont icon-enter"></i>');
+           
     },
 
-
-    //渲染日历表格UI
+    //创建表单
     renderTable: function() {
-        var CFG = this.CFG,
-            html = '';
-        this.table = $('<table class="calender-table"></div>').appendTo(this.wrapper);
-        html += '<thead class="calender-title">' +
+        this.table = $(
+            '<table class="calender-table">' +
+                '<thead class="calender-title">' +
                     '<tr>' +
                         '<th class="highlight">日</th>' +
                         '<th>一</th><th>二</th><th>三</th><th>四</th><th>五</th>' + 
                         '<th class="highlight">六</th>' +
                     '</tr>' +
-                '</thead>';
+                '</thead>' +
+                '<tbody></tbody>' +
+            '</table>').appendTo(this.wrapper); 
+        this.renderTableData();              
+    },
+
+    //更新表格数据
+    renderTableData: function() {
+        var html = '';
         this.data.dateArr.forEach(function(item, index) {
             if (index % 7 === 0) {
                 html += '<tr><td class="highlight">' + item + '</td>'
@@ -91,9 +90,12 @@ Calender.prototype = {
                 html += '<td>' + item + '</td>'
             }
         })
-        this.table.html(html);
+        this.table.find('tbody').html(html);
+        this.setDisabled();
+    },
 
-        //设置不可选日期样式
+    //设置不可选日期样式
+    setDisabled: function() {
         this.table.find('tbody tr:first-child').find('td').each(function(){
             if (parseInt($(this).text(), 10) > 7) {
                 $(this).addClass('disabled');
@@ -105,6 +107,7 @@ Calender.prototype = {
             }
         });
     },
+        
     
     //获取当前日期所在月份的日期数据
     getMonthData: function() {
@@ -135,19 +138,51 @@ Calender.prototype = {
             this.data.dateArr.push(lastDate.getDate())
         }     
     },
+    
+    //选中日期
+    selectDate: function(e) {
+        var $target = $(e.target);
+        this.table.find('td').removeClass('selected');        
+        if (!$target.is('.disabled')) {
+            $target.addClass('selected');
+            this.data.date = parseInt($target.text(), 10);
+        }
+    },
+
+    //更新当前日期
+    updateCurrentDate: function(curDate) {
+        this.data.year = curDate.getFullYear();
+        this.data.month = curDate.getMonth();
+        this.data.date = curDate.getDate();
+        this.getMonthData();
+    },
 
     //设置选中日期
-    setDate: function() {
+    setDate: function(date) {
+        var curDate = this.data.date;
+        this.updateCurrentDate(date);
+        this.renderTableData();
+        this.updateHeaderValue();       
+        this.table.find('td').each(function() {
+            if (parseInt($(this).text(), 10) === curDate && !$(this).is('.disabled')) {
+                $(this).addClass('selected');
+            }
+        });       
+    },
 
+    //更新头部月份值与年份值
+    updateHeaderValue: function() {
+        $('#month-input').val(this.data.month + 1 + '月');
+        $('#year-input').val(this.data.year + '年');
     },
 
     //获取选中日期
     getDate: function() {
-
+        return new Date(this.data.year, this.data.month, this.data.date);
     },
     
     //事件绑定
     bindEvent: function() {
-
+        this.table.on('click', 'td', this.selectDate.bind(this));
     }
 }
