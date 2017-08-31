@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-31 23:46:28
+* @Last Modified time: 2017-09-01 00:23:56
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -24,7 +24,6 @@ Calender.prototype = {
         var curDate = this.CFG.currentDate;
         this.updateCurrentDate(curDate);
         this.renderUI();
-        this.setDate(curDate);
         this.bindEvent();        
     },
     
@@ -58,11 +57,10 @@ Calender.prototype = {
                         '<i class="iconfont icon-unfold"></i>' +
                     '</div>' +
                 '</div>' +
-                '<i class="iconfont icon-enter"></i>');
-           
+                '<i class="iconfont icon-enter"></i>');          
     },
 
-    //创建表单
+    //渲染日历表格UI
     renderTable: function() {
         this.table = $(
             '<table class="calender-table">' +
@@ -78,7 +76,7 @@ Calender.prototype = {
         this.renderTableData();              
     },
 
-    //更新表格数据
+    //渲染表格数据
     renderTableData: function() {
         var html = '';
         this.data.dateArr.forEach(function(item, index) {
@@ -92,6 +90,7 @@ Calender.prototype = {
         })
         this.table.find('tbody').html(html);
         this.setDisabled();
+        this.highlightSelected(this.data.date);
     },
 
     //设置不可选日期样式
@@ -107,12 +106,10 @@ Calender.prototype = {
             }
         });
     },
-        
-    
+           
     //获取当前日期所在月份的日期数据
     getMonthData: function() {
         var CFG = this.CFG,
-            curDate = CFG.currentDate,
             curMonth = this.data.month,
             curYear = this.data.year,
             firstDate = new Date(curYear, curMonth, 1),
@@ -158,16 +155,20 @@ Calender.prototype = {
     },
 
     //设置选中日期
-    setDate: function(date) {
-        var curDate = this.data.date;
+    setDate: function(date) {        
         this.updateCurrentDate(date);
         this.renderTableData();
-        this.updateHeaderValue();       
+        this.updateHeaderValue(); 
+        this.highlightSelected(this.data.date);          
+    },
+
+    //选中的日期添加选中样式
+    highlightSelected: function(curDate) {
         this.table.find('td').each(function() {
             if (parseInt($(this).text(), 10) === curDate && !$(this).is('.disabled')) {
                 $(this).addClass('selected');
             }
-        });       
+        });  
     },
 
     //更新头部月份值与年份值
@@ -180,9 +181,28 @@ Calender.prototype = {
     getDate: function() {
         return new Date(this.data.year, this.data.month, this.data.date);
     },
+
+    //切换至下个月日历
+    goNextMonth: function() {
+        var curDate = new Date(this.data.year, this.data.month + 1, this.data.date);
+        this.updateCurrentDate(curDate);
+        this.renderTableData();
+        this.updateHeaderValue(); 
+    },
+
+    //切换至上个月日历
+    goPrevMonth: function() {
+        var curDate = new Date(this.data.year, this.data.month - 1, this.data.date);
+        this.updateCurrentDate(curDate);
+        this.getMonthData();
+        this.renderTableData();
+        this.updateHeaderValue();
+    },
     
     //事件绑定
     bindEvent: function() {
         this.table.on('click', 'td', this.selectDate.bind(this));
+        this.header.on('click', '.icon-enter', this.goNextMonth.bind(this));
+        this.header.on('click', '.icon-return', this.goPrevMonth.bind(this));
     }
 }
