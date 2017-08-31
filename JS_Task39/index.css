@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-30 16:54:01
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-30 23:51:28
+* @Last Modified time: 2017-08-31 10:59:37
 */
  * {
     margin: 0;
@@ -42,17 +42,12 @@
     font-size: 20px;
     line-height: 3;
 }
-.sort-table tr.freeze-head {
+.frozen-table {
     position: fixed;
-    width: 800px;
-    top: 10px;
-    right: 10px;
+    top: 0px;
     left: 30px;
 }
-.sort-table tr.freeze-head th {
-    display: table-cell;
-}
-
+ 
 /* toamto主题 */
 .sort-table.tomato th {
     background: tomato;

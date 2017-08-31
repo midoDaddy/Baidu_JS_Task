@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-30 16:44:35
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-30 23:41:53
+* @Last Modified time: 2017-08-31 11:31:54
 */
 $(function() {
     function getRandomData(n) {
@@ -39,7 +39,7 @@ $(function() {
             }, 
             math: null,
             english: function(a, b){
-                return b.chinese - a.chinese
+                return b.english - a.english
             }, 
             total: null,
         },

@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-30 16:44:45
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-30 23:45:45
+* @Last Modified time: 2017-08-31 11:31:43
 */
 var SortTable = function(cfg) {
     this.cfg = {
@@ -30,7 +30,6 @@ SortTable.prototype = {
         this.data = this.CFG.data; 
         this.renderUI();
         this.bindEvent();
-        
     },
 
     renderUI: function() {
@@ -44,7 +43,7 @@ SortTable.prototype = {
             this.table = $('<table></table>').appendTo(CFG.container)
                 .addClass(CFG.className)
                 .css({
-                    width: CFG.width + 'px',
+                    width: CFG.width,
                     lineHeight: CFG.lineHeight,
                     fontSize: CFG.fontSize + 'px',
                     color: CFG.color
@@ -59,8 +58,7 @@ SortTable.prototype = {
                 }
                 headHtml += '<th data-type="' + item + '">' + CFG.head[item] + iconHtml + '</th>';
             }
-            this.tableHead = $('<tr>' + headHtml + '</tr>').appendTo(this.table)
-                .addClass('freeze-head');
+            this.tableHead = $('<thead><tr>' + headHtml + '</tr></thead>').appendTo(this.table);
     
             //创建表格主体
             this.tableBody = $('<tbody></tbody>').appendTo(this.table);     
@@ -75,14 +73,12 @@ SortTable.prototype = {
             bodyHtml += '<tr>' + itemHtml + '</tr>';
         })
         this.tableBody.html(bodyHtml);
-
     },
 
     //排序
     sortData: function(e) {
         var CFG = this.CFG,
             type = $(e.target).parent().data('type');
-
         //如果传入了排序方法，则使用传入的方法，否则使用默认排序方法（降序）
         if (CFG.sortMethods[type]) {
             this.data.sort(CFG.sortMethods[type]);            
@@ -106,11 +102,27 @@ SortTable.prototype = {
             this.sortFlag = true;
         }
     },
+    
+    //冻结表格头部
+    frozenHead: function() {
+        var minY = this.table.offset().top,
+            maxY = this.table.offset().top + this.table.height();
+        if (!this.frozenTable) {
+            this.frozenTable = this.table.clone(true).appendTo(this.CFG.container)
+            .addClass('frozen-table').hide();
+            this.frozenTable.find('tbody').css('visibility', 'hidden');
+        }
+        
+        if ($(window).scrollTop() > minY && $(document).scrollTop() < maxY) {
+            this.frozenTable.show();
+        } else {
+            this.frozenTable.hide();
+        }       
+    },
 
     //事件绑定
     bindEvent: function() {
-        var CFG = this.CFG,
-            self = this;
         this.table.on('click', '.sort-icon', this.sortData.bind(this));
+        $(document).on('scroll', this.frozenHead.bind(this));
     }
 }
