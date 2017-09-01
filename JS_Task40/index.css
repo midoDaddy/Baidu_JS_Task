@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:03
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-08-31 23:51:00
+* @Last Modified time: 2017-09-01 11:38:36
 */
 * {
     margin: 0;
@@ -13,8 +13,6 @@
 }
 
 .calender-wrapper {
-    width: 400px;
-    height: 400px;
     margin: 0 auto;
     border: 2px solid tomato;
 }
@@ -75,8 +73,6 @@
 }
 
 .calender-table {
-    width: 380px;
-    height: 330px;
     margin: 10px;
     text-align: center;
     font-size: 18px;
@@ -108,4 +104,38 @@
 }
 .calender-table .selected:hover {
     color: #fff;
+}
+
+.calender-info {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 40px;
+    color: tomato;
+}
+
+/* pink主题 */
+.calender-wrapper.pink {
+    border-color: pink;
+}
+.calender-wrapper.pink .calender-header {
+    background: pink;
+}
+.calender-wrapper.pink .input-item {
+    color: pink;
+}
+.calender-wrapper.pink .controller-wrapper .iconfont {
+    color: pink;
+}
+.calender-wrapper.pink .calender-table .selected {
+    background: pink;
+}
+.calender-wrapper.pink .calender-table .selected:hover {
+    color: #fff;
+}
+.calender-wrapper.pink .calender-table td:hover {
+    color: pink;
+}
+.calender-wrapper.pink .calender-table .highlight {
+    color: pink;
 }
