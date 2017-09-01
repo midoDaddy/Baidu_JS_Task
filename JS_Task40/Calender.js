@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-01 11:48:29
+* @Last Modified time: 2017-09-02 00:08:53
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -10,12 +10,13 @@ var Calender = function(cfg) {
         container: null,
         width: 400,
         height: 400,
-        themeColor: null
+        themeColor: null,
+        minDate: null,
+        maxDate: null
     }
     this.CFG = $.extend(this.cfg, cfg);
     this.data = {};
     this.init();
-
 }
 
 Calender.prototype = {
@@ -107,11 +108,51 @@ Calender.prototype = {
 
     //渲染不可选日期样式
     renderDisabled: function() {
+        var CFG = this.CFG,
+            curYear = this.data.year,
+            curMonth = this.data.month,
+            curDate = this.data.date,
+            minYear = CFG.minDate.getFullYear(),
+            minMonth = CFG.minDate.getMonth(),
+            minDate = CFG.minDate.getDate(),
+            maxYear = CFG.maxDate.getFullYear(),
+            maxMonth = CFG.maxDate.getMonth(),
+            maxDate = CFG.maxDate.getDate(),
+            $td = this.table.find('td');
+
+        //根据参数设置不可选日期
+        if (curYear < minYear || curYear > maxYear) {
+            $td.addClass('disabled');
+        } 
+        else if (curYear === minYear && curMonth < minMonth) {
+            $td.addClass('disabled');
+        } 
+        else if (curYear === maxYear && curMonth > maxMonth) {
+            $td.addClass('disabled');
+        } 
+        else if (curYear === minYear && curMonth === minMonth) {
+            $td.each(function() {
+                if (parseInt($(this).text(), 10) < minDate) {
+                    $(this).addClass('disabled');
+                }
+            });
+        } 
+        else if (curYear === maxYear && curMonth === maxMonth) {
+            $td.each(function() {
+                if (parseInt($(this).text(), 10) > maxDate) {
+                    $(this).addClass('disabled');
+                }
+            });
+        }
+        
+        //上月日期设为不可选
         this.table.find('tbody tr:first-child').find('td').each(function(){
             if (parseInt($(this).text(), 10) > 7) {
                 $(this).addClass('disabled');
             }
         });
+
+        //下月日期设为不可选
         this.table.find('tr:last-child').find('td').each(function(){
             if (parseInt($(this).text(), 10) < 7) {
                 $(this).addClass('disabled');
@@ -223,6 +264,28 @@ Calender.prototype = {
         this.setDate(this.data.Date);
     },
     
+    //改变月份
+    changeMonth: function(e) {
+        var value = parseInt(e.target.value, 10);
+        if (value > 0 && value <= 12) {
+            this.data.Date.setMonth(value - 1);
+            this.setDate(this.data.Date);
+        } else {
+            alert('请输入1~12之间的整数');
+        }
+    },
+    
+    //改变年份
+    changeYear: function(e) {
+        var value = parseInt(e.target.value, 10);
+        if (value) {
+            this.data.Date.setYear(value);
+            this.setDate(this.data.Date);
+        } else {
+            alert('请输入有效年份');
+        }
+    },
+    
     //事件绑定
     bindEvent: function() {
         this.table.on('click', 'td', this.selectDate.bind(this));
@@ -232,5 +295,7 @@ Calender.prototype = {
         this.header.on('click', '.month-controller .icon-unfold', this.goNextMonth.bind(this));
         this.header.on('click', '.year-controller .icon-packup', this.goPrevYear.bind(this));
         this.header.on('click', '.year-controller .icon-unfold', this.goNextYear.bind(this));
+        $('#month-input').on('blur', this.changeMonth.bind(this));
+        $('#year-input').on('blur', this.changeYear.bind(this));       
     }
 }
