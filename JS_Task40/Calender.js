@@ -2,17 +2,17 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-02 00:08:53
+* @Last Modified time: 2017-09-02 22:41:52
 */
 var Calender = function(cfg) {
     this.cfg = {
-        currentDate: new Date(),
         container: null,
+        currentDate: new Date(),
+        minDate: null,
+        maxDate: null,      
         width: 400,
         height: 400,
-        themeColor: null,
-        minDate: null,
-        maxDate: null
+        themeColor: null,       
     }
     this.CFG = $.extend(this.cfg, cfg);
     this.data = {};
@@ -25,10 +25,48 @@ Calender.prototype = {
     
     //初始化
     init: function() {
-        var curDate = this.CFG.currentDate;
-        this.updateCurDate(curDate);
+        this.updateCurDate(this.CFG.currentDate);
         this.renderUI();
         this.bindEvent();        
+    },
+
+    //更新当前日期
+    updateCurDate: function(curDate) {
+        this.data.Date = curDate;
+        this.data.year = curDate.getFullYear();
+        this.data.month = curDate.getMonth();
+        this.data.date = curDate.getDate();
+        this.getDateArr();
+        this.getCurDate();
+    },
+
+    //获取当前月份的所有日期数据
+    getDateArr: function() {
+        var CFG = this.CFG,
+            curMonth = this.data.month,
+            curYear = this.data.year,
+            firstDate = new Date(curYear, curMonth, 1),
+            lastDate = new Date(curYear, curMonth + 1, 0);
+
+        //清空数据
+        this.data.dateArr = [];
+
+        //添加本月的日期
+        for (var i = 0; i < lastDate.getDate(); i++) {
+            this.data.dateArr.push(i + 1);
+        }
+
+        //如果第一天不是周日，则从上月补齐至周日
+        while (firstDate.getDay() !== 0) {
+            firstDate.setDate(firstDate.getDate() - 1);
+            this.data.dateArr.unshift(firstDate.getDate());
+        }
+
+        //如果最后一天不是周六，则从下月补齐至周日
+        while (lastDate.getDay() !== 6) {
+            lastDate.setDate(lastDate.getDate() + 1);
+            this.data.dateArr.push(lastDate.getDate());
+        }     
     },
    
     //渲染日历UI
@@ -112,12 +150,12 @@ Calender.prototype = {
             curYear = this.data.year,
             curMonth = this.data.month,
             curDate = this.data.date,
-            minYear = CFG.minDate.getFullYear(),
-            minMonth = CFG.minDate.getMonth(),
-            minDate = CFG.minDate.getDate(),
-            maxYear = CFG.maxDate.getFullYear(),
-            maxMonth = CFG.maxDate.getMonth(),
-            maxDate = CFG.maxDate.getDate(),
+            minDate = CFG.minDate,
+            maxDate = CFG.maxDate,
+            minYear = minDate.getFullYear(),
+            minMonth = minDate.getMonth(),
+            maxYear = maxDate.getFullYear(),
+            maxMonth = maxDate.getMonth(),
             $td = this.table.find('td');
 
         //根据参数设置不可选日期
@@ -132,26 +170,25 @@ Calender.prototype = {
         } 
         else if (curYear === minYear && curMonth === minMonth) {
             $td.each(function() {
-                if (parseInt($(this).text(), 10) < minDate) {
+                if (parseInt($(this).text(), 10) < minDate.getDate()) {
                     $(this).addClass('disabled');
                 }
             });
         } 
         else if (curYear === maxYear && curMonth === maxMonth) {
             $td.each(function() {
-                if (parseInt($(this).text(), 10) > maxDate) {
+                if (parseInt($(this).text(), 10) > maxDate.getDate()) {
                     $(this).addClass('disabled');
                 }
             });
-        }
-        
+        }  
+
         //上月日期设为不可选
         this.table.find('tbody tr:first-child').find('td').each(function(){
             if (parseInt($(this).text(), 10) > 7) {
                 $(this).addClass('disabled');
             }
         });
-
         //下月日期设为不可选
         this.table.find('tr:last-child').find('td').each(function(){
             if (parseInt($(this).text(), 10) < 7) {
@@ -169,45 +206,6 @@ Calender.prototype = {
                 $(this).addClass('selected');
             }
         });  
-    },
-
-    //更新当前日期
-    updateCurDate: function(curDate) {
-        this.data.Date = curDate;
-        this.data.year = curDate.getFullYear();
-        this.data.month = curDate.getMonth();
-        this.data.date = curDate.getDate();
-        this.getDateArr();
-        this.getCurDate();
-    },
-
-    //获取当前日期所在月份的日期数据
-    getDateArr: function() {
-        var CFG = this.CFG,
-            curMonth = this.data.month,
-            curYear = this.data.year,
-            firstDate = new Date(curYear, curMonth, 1),
-            lastDate = new Date(curYear, curMonth + 1, 0);
-
-        //清空数据
-        this.data.dateArr = [];
-
-        //添加本月的日期
-        for (var i = 0; i < lastDate.getDate(); i++) {
-            this.data.dateArr.push(i + 1);
-        }
-
-        //如果第一天不是周日，则从上月补齐至周日
-        while (firstDate.getDay() !== 0) {
-            firstDate.setDate(firstDate.getDate() - 1);
-            this.data.dateArr.unshift(firstDate.getDate());
-        }
-
-        //如果最后一天不是周六，则从下月补齐至周日
-        while (lastDate.getDay() !== 6) {
-            lastDate.setDate(lastDate.getDate() + 1);
-            this.data.dateArr.push(lastDate.getDate());
-        }     
     },
 
     //选中日期
@@ -243,7 +241,6 @@ Calender.prototype = {
     goNextMonth: function() {
         this.data.Date.setMonth(this.data.month + 1);
         this.setDate(this.data.Date);
-
     },
 
     //切换至上个月日历
@@ -288,14 +285,27 @@ Calender.prototype = {
     
     //事件绑定
     bindEvent: function() {
+        var self = this;
         this.table.on('click', 'td', this.selectDate.bind(this));
-        this.header.on('click', '.icon-enter', this.goNextMonth.bind(this));
-        this.header.on('click', '.icon-return', this.goPrevMonth.bind(this));
-        this.header.on('click', '.month-controller .icon-packup', this.goPrevMonth.bind(this));        
-        this.header.on('click', '.month-controller .icon-unfold', this.goNextMonth.bind(this));
-        this.header.on('click', '.year-controller .icon-packup', this.goPrevYear.bind(this));
-        this.header.on('click', '.year-controller .icon-unfold', this.goNextYear.bind(this));
         $('#month-input').on('blur', this.changeMonth.bind(this));
-        $('#year-input').on('blur', this.changeYear.bind(this));       
+        $('#year-input').on('blur', this.changeYear.bind(this)); 
+        this.header.on('click', function(e) {
+            var $target = $(e.target);
+            switch(true) {
+                case $target.is('.icon-enter'): self.goNextMonth();
+                    break;
+                case $target.is('.icon-return'): self.goPrevMonth();
+                    break;
+                case $target.is('.month-controller .icon-packup'): self.goPrevMonth();
+                    break;
+                case $target.is('.month-controller .icon-unfold'): self.goNextMonth();
+                    break;
+                case $target.is('.year-controller .icon-packup'): self.goPrevYear();
+                    break;
+                case $target.is('.year-controller .icon-unfold'): self.goNextYear();
+                    break;
+            }
+        });
+              
     }
 }
