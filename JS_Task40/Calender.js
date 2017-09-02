@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-02 22:41:52
+* @Last Modified time: 2017-09-02 23:54:47
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -10,9 +10,9 @@ var Calender = function(cfg) {
         currentDate: new Date(),
         minDate: null,
         maxDate: null,      
-        width: 400,
-        height: 400,
-        themeColor: null,       
+        width: 300,
+        height: 300,
+        themeColor: null     
     }
     this.CFG = $.extend(this.cfg, cfg);
     this.data = {};
@@ -78,7 +78,7 @@ Calender.prototype = {
                 width: CFG.width + 'px',
                 height: CFG.height + 'px',
             });
-        CFG.theme && this.wrapper.addClass(CFG.theme);
+        CFG.themeColor && this.wrapper.addClass(CFG.themeColor);
         this.renderHead();
         this.renderTable();
     },
@@ -146,42 +146,51 @@ Calender.prototype = {
 
     //渲染不可选日期样式
     renderDisabled: function() {
-        var CFG = this.CFG,
+         var CFG = this.CFG,
             curYear = this.data.year,
             curMonth = this.data.month,
             curDate = this.data.date,
-            minDate = CFG.minDate,
-            maxDate = CFG.maxDate,
-            minYear = minDate.getFullYear(),
-            minMonth = minDate.getMonth(),
-            maxYear = maxDate.getFullYear(),
-            maxMonth = maxDate.getMonth(),
             $td = this.table.find('td');
+        
+        //设置可选日期下限
+        if (CFG.minDate) {
+            var minDate = CFG.minDate,
+                minYear = minDate.getFullYear(),
+                minMonth = minDate.getMonth();
+            if (curYear < minYear) {
+                $td.addClass('disabled');
+            } 
+            if (curYear === minYear && curMonth < minMonth) {
+                $td.addClass('disabled');
+            } 
+            if (curYear === minYear && curMonth === minMonth) {
+                $td.each(function() {
+                    if (parseInt($(this).text(), 10) < minDate.getDate()) {
+                        $(this).addClass('disabled');
+                    }
+                });
+            } 
+        }
 
-        //根据参数设置不可选日期
-        if (curYear < minYear || curYear > maxYear) {
-            $td.addClass('disabled');
-        } 
-        else if (curYear === minYear && curMonth < minMonth) {
-            $td.addClass('disabled');
-        } 
-        else if (curYear === maxYear && curMonth > maxMonth) {
-            $td.addClass('disabled');
-        } 
-        else if (curYear === minYear && curMonth === minMonth) {
-            $td.each(function() {
-                if (parseInt($(this).text(), 10) < minDate.getDate()) {
-                    $(this).addClass('disabled');
-                }
-            });
-        } 
-        else if (curYear === maxYear && curMonth === maxMonth) {
-            $td.each(function() {
-                if (parseInt($(this).text(), 10) > maxDate.getDate()) {
-                    $(this).addClass('disabled');
-                }
-            });
-        }  
+        //设置可选日期上限
+        if (CFG.maxDate) {
+            var maxDate = CFG.maxDate,
+                maxYear = maxDate.getFullYear(),
+                maxMonth = maxDate.getMonth();
+            if (curYear > maxYear) {
+                $td.addClass('disabled');
+            } 
+            if (curYear === maxYear && curMonth > maxMonth) {
+                $td.addClass('disabled');
+            } 
+            if (curYear === maxYear && curMonth === maxMonth) {
+                $td.each(function() {
+                    if (parseInt($(this).text(), 10) > maxDate.getDate()) {
+                        $(this).addClass('disabled');
+                    }
+                });
+            } 
+        }    
 
         //上月日期设为不可选
         this.table.find('tbody tr:first-child').find('td').each(function(){
@@ -234,7 +243,7 @@ Calender.prototype = {
 
     //获取选中日期
     getCurDate: function() {
-        console.log(this.data.year + '年' + (this.data.month + 1) + '月' + this.data.date + '日');
+        return this.data.Date;
     },
 
     //切换至下个月日历
