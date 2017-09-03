@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-02 23:44:52
+* @Last Modified time: 2017-09-03 23:40:31
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -11,6 +11,7 @@ var Calender = function(cfg) {
         currentDate: new Date(),
         minDate: null,
         maxDate: null, 
+        rangeSelect: false,
         selectHandler: function(data) {
             console.log(data)
         },
@@ -216,17 +217,20 @@ Calender.prototype = {
 
     //渲染选中日期样式
     renderSelected: function() {
-        var curDate = this.data.date;
+        var curDate = this.data.date,
+            self = this;
         this.table.find('td').each(function() {
-            $(this).removeClass('selected');
+            if (!self.data.dateEnd) {
+                $(this).removeClass('selected');
+            }           
             if (parseInt($(this).text(), 10) === curDate && !$(this).is('.disabled')) {
                 $(this).addClass('selected');
             }
         });  
     },
 
-    //选中日期
-    selectDate: function(e) {
+    //选中单一日期
+    selectDateSingle: function(e) {
         var $target = $(e.target),
             CFG = this.CFG;               
         if (!$target.is('.disabled')) {
@@ -236,6 +240,28 @@ Calender.prototype = {
             this.showSelectedDate();
             CFG.container.hide();
             CFG.selectHandler && CFG.selectHandler(this.data.Date);
+        }
+    },
+
+    //选择日期范围
+    selectDateRange: function(e) {
+        var $target = $(e.target),
+            CFG = this.CFG,
+            data = this.data;               
+        if (!$target.is('.disabled')) {
+            if (!data.firstFlag && !data.secondFlag) {
+                data.firstFlag = true;
+                data.Date.setDate(parseInt($target.text(), 10));
+                this.data.dateStart = this.data.Date;
+                this.updateCurDate(data.Date);
+                this.renderSelected();
+            } else {
+                data.secondFlag = true;
+                data.Date.setDate(parseInt($target.text(), 10));
+                data.dateEnd = data.Date;
+                this.updateCurDate(data.Date);
+                this.renderSelected();
+            } 
         }
     },
 
@@ -313,7 +339,9 @@ Calender.prototype = {
     //事件绑定
     bindEvent: function() {
         var self = this;
-        this.table.on('click', 'td', this.selectDate.bind(this));
+        this.table.on('click', 'td', function(e) {
+            self.CFG.rangeSelect ? self.selectDateRange(e) : self.selectDateSingle(e);
+        });
         $('#month-input').on('blur', this.changeMonth.bind(this));
         $('#year-input').on('blur', this.changeYear.bind(this)); 
         this.header.on('click', function(e) {
