@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-04 15:40:34
+* @Last Modified time: 2017-09-04 23:06:20
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -12,6 +12,14 @@ var Calender = function(cfg) {
         minDate: null,
         maxDate: null, 
         rangeSelect: false,
+        maxRange: 100,
+        maxRangeHandler: function(data) {
+            alert(data);
+        },
+        minRange: 3,
+        minRangeHandler: function(data) {
+            alert(data);
+        },
         selectHandler: function(data) {
             console.log(data)
         },
@@ -166,50 +174,15 @@ Calender.prototype = {
     //渲染不可选日期样式
     renderDisabled: function() {
         var CFG = this.CFG,
-            curYear = this.data.year,
-            curMonth = this.data.month,
-            curDate = this.data.date,
-            $td = this.table.find('td');
+            data = this.data;
         
-        //设置可选日期下限
-        if (CFG.minDate) {
-            var minDate = CFG.minDate,
-                minYear = minDate.getFullYear(),
-                minMonth = minDate.getMonth();
-            if (curYear < minYear) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === minYear && curMonth < minMonth) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === minYear && curMonth === minMonth) {
-                $td.each(function() {
-                    if (parseInt($(this).text(), 10) < minDate.getDate()) {
-                        $(this).addClass('disabled');
-                    }
-                });
-            } 
-        }
-
-        //设置可选日期上限
-        if (CFG.maxDate) {
-            var maxDate = CFG.maxDate,
-                maxYear = maxDate.getFullYear(),
-                maxMonth = maxDate.getMonth();
-            if (curYear > maxYear) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === maxYear && curMonth > maxMonth) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === maxYear && curMonth === maxMonth) {
-                $td.each(function() {
-                    if (parseInt($(this).text(), 10) > maxDate.getDate()) {
-                        $(this).addClass('disabled');
-                    }
-                });
-            } 
-        }  
+        this.table.find('td').each(function() {
+            var dateValue = parseInt($(this).text(), 10),
+                thisDate = new Date(data.year, data.month, dateValue);
+            if ((CFG.maxDate && thisDate > CFG.maxDate) || (CFG.minDate && thisDate < CFG.minDate)) {
+                $(this).addClass('disabled');
+            }
+        });
 
         //上月日期设为不可选
         this.table.find('tbody tr:first-child').find('td').each(function(){
@@ -264,25 +237,45 @@ Calender.prototype = {
                 data.firstFlag = true;
                 data.Date.setDate(parseInt($target.text(), 10));
                 data.date = data.Date.getDate();
-                data.dateStart = new Date(data.year, data.month, data.date);
+                data.firstDate = new Date(data.year, data.month, data.date);
                 this.renderSelected();
             } else {
                 data.secondFlag = true;
                 data.Date.setDate(parseInt($target.text(), 10));
                 data.date = data.Date.getDate();
-                data.dateEnd = new Date(data.year, data.month, data.date);
+                data.secondDate = new Date(data.year, data.month, data.date);
                 this.renderDateRange();
-            } 
+            }
         }
     },
 
     //渲染所选日期范围的样式
     renderDateRange: function() {
-        var data = this.data;
+        var data = this.data,
+            CFG = this.CFG,
+            range = null;
+        data.dateStart = new Date(Math.min(data.firstDate, data.secondDate));
+        data.dateEnd = new Date(Math.max(data.firstDate, data.secondDate));
+        range = (data.dateEnd - data.dateStart)/(3600000*24);
+
+        if (CFG.minRange && range < CFG.minRange) {
+            var minMsg = '日期范围不得小于' + CFG.minRange + '天';
+            CFG.minRangeHandler && CFG.minRangeHandler(minMsg);
+            data.dateEnd.setDate(data.dateStart.getDate() + CFG.minRange);
+        }
+
+        if (CFG.maxRange && range > CFG.maxRange) {
+            var maxMsg = '日期范围不得超过' + CFG.maxRange + '天';
+            CFG.maxRangeHandler && CFG.maxRangeHandler(maxMsg);
+            data.dateEnd.setDate(data.dateStart.getDate() + CFG.maxRange);
+        }
+
         this.table.find('td').each(function() {
             var dateValue = parseInt($(this).text(), 10),
                 today = new Date(data.year, data.month, dateValue);
+
             $(this).removeClass('range-selected').removeClass('selected');
+
             if (!($(this).is('.disabled'))) {
                 if (today > data.dateStart && today < data.dateEnd) {
                     $(this).addClass('range-selected');
@@ -292,19 +285,23 @@ Calender.prototype = {
                 }
             }           
         });
+        this.showSelectedDate();
     },
 
     //日期范围的确认提交
     confirmDateRange: function() {
-        var CFG = this.CFG;
-        this.showSelectedDate();
+        var CFG = this.CFG;        
         CFG.container.hide();
         CFG.selectHandler && CFG.selectHandler(this.data.Date);
     },
 
     //清空选择的日期范围
     clearDateRange: function() {
-        console.log('clear')
+        var data = this.data;
+        data.firstFlag = false;
+        data.secondFlag = false;
+        this.table.find('td').removeClass('range-selected').removeClass('selected');
+        this.CFG.showItem.val('');
     },
 
     //指定选中日期并显示
@@ -331,7 +328,7 @@ Calender.prototype = {
         if (this.CFG.rangeSelect) {
             this.CFG.showItem.val(this.getDateStr(this.data.dateStart) + ' ~ ' + this.getDateStr(this.data.dateEnd))
         } else {
-            this.CFG.showItem.val(this.data.Date);
+            this.CFG.showItem.val(this.getDateStr(this.data.Date));
         }       
     },
 

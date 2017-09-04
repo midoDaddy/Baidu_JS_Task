@@ -2,18 +2,20 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:03
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-04 15:21:37
+* @Last Modified time: 2017-09-04 22:59:13
 */
 * {
     margin: 0;
     padding: 0;
 }
 .wrapper {
-    margin: 50px;
+    margin: 50px 0;
 }
 
 .date-select-wrapper {
     position: relative;
+    float: left;
+    margin: 0 70px;
     font-size: 0;
 }
 .date-select-label {
