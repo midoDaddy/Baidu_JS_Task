@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-03 23:40:31
+* @Last Modified time: 2017-09-04 15:40:34
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -86,6 +86,7 @@ Calender.prototype = {
         CFG.themeColor&& this.wrapper.addClass(CFG.themeColor);
         this.renderHead();
         this.renderTable();
+        CFG.rangeSelect && this.renderBtn();
     },
 
     //渲染日历头部UI
@@ -150,6 +151,16 @@ Calender.prototype = {
         this.table.find('tbody').html(html);
         this.renderDisabled();
         this.renderSelected();
+        this.data.dateEnd && this.renderDateRange();
+    },
+
+    //渲染确定取消按钮
+    renderBtn: function() {
+       $('<div class="btn-wrapper">' +
+            '<div class="btn confirm-btn">确定</div>' +   
+            '<div class="btn cancel-btn">取消</div>' +   
+        '</div>').appendTo(this.wrapper);
+       this.wrapper.height(this.wrapper.height() + 40);
     },
 
     //渲染不可选日期样式
@@ -252,17 +263,48 @@ Calender.prototype = {
             if (!data.firstFlag && !data.secondFlag) {
                 data.firstFlag = true;
                 data.Date.setDate(parseInt($target.text(), 10));
-                this.data.dateStart = this.data.Date;
-                this.updateCurDate(data.Date);
+                data.date = data.Date.getDate();
+                data.dateStart = new Date(data.year, data.month, data.date);
                 this.renderSelected();
             } else {
                 data.secondFlag = true;
                 data.Date.setDate(parseInt($target.text(), 10));
-                data.dateEnd = data.Date;
-                this.updateCurDate(data.Date);
-                this.renderSelected();
+                data.date = data.Date.getDate();
+                data.dateEnd = new Date(data.year, data.month, data.date);
+                this.renderDateRange();
             } 
         }
+    },
+
+    //渲染所选日期范围的样式
+    renderDateRange: function() {
+        var data = this.data;
+        this.table.find('td').each(function() {
+            var dateValue = parseInt($(this).text(), 10),
+                today = new Date(data.year, data.month, dateValue);
+            $(this).removeClass('range-selected').removeClass('selected');
+            if (!($(this).is('.disabled'))) {
+                if (today > data.dateStart && today < data.dateEnd) {
+                    $(this).addClass('range-selected');
+                }
+                if (+today === +data.dateEnd || +today === +data.dateStart) {
+                    $(this).addClass('selected');
+                }
+            }           
+        });
+    },
+
+    //日期范围的确认提交
+    confirmDateRange: function() {
+        var CFG = this.CFG;
+        this.showSelectedDate();
+        CFG.container.hide();
+        CFG.selectHandler && CFG.selectHandler(this.data.Date);
+    },
+
+    //清空选择的日期范围
+    clearDateRange: function() {
+        console.log('clear')
     },
 
     //指定选中日期并显示
@@ -286,8 +328,16 @@ Calender.prototype = {
 
     //显示选中日期
     showSelectedDate: function() {
-        var dateStr = this.data.year + '-' + (this.data.month + 1) + '-' + this.data.date;
-        this.CFG.showItem.val(dateStr);
+        if (this.CFG.rangeSelect) {
+            this.CFG.showItem.val(this.getDateStr(this.data.dateStart) + ' ~ ' + this.getDateStr(this.data.dateEnd))
+        } else {
+            this.CFG.showItem.val(this.data.Date);
+        }       
+    },
+
+    //日期转化为相应格式的字符串
+    getDateStr: function(date) {
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     },
 
     //切换至下个月日历
@@ -342,8 +392,11 @@ Calender.prototype = {
         this.table.on('click', 'td', function(e) {
             self.CFG.rangeSelect ? self.selectDateRange(e) : self.selectDateSingle(e);
         });
+        this.wrapper.find('.confirm-btn').on('click', this.confirmDateRange.bind(this));
+        this.wrapper.find('.cancel-btn').on('click', this.clearDateRange.bind(this));
         $('#month-input').on('blur', this.changeMonth.bind(this));
         $('#year-input').on('blur', this.changeYear.bind(this)); 
+
         this.header.on('click', function(e) {
             var $target = $(e.target);
             switch(true) {
