@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-02 23:44:52
+* @Last Modified time: 2017-09-04 23:10:23
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -154,50 +154,15 @@ Calender.prototype = {
     //渲染不可选日期样式
     renderDisabled: function() {
         var CFG = this.CFG,
-            curYear = this.data.year,
-            curMonth = this.data.month,
-            curDate = this.data.date,
-            $td = this.table.find('td');
+            data = this.data;
         
-        //设置可选日期下限
-        if (CFG.minDate) {
-            var minDate = CFG.minDate,
-                minYear = minDate.getFullYear(),
-                minMonth = minDate.getMonth();
-            if (curYear < minYear) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === minYear && curMonth < minMonth) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === minYear && curMonth === minMonth) {
-                $td.each(function() {
-                    if (parseInt($(this).text(), 10) < minDate.getDate()) {
-                        $(this).addClass('disabled');
-                    }
-                });
-            } 
-        }
-
-        //设置可选日期上限
-        if (CFG.maxDate) {
-            var maxDate = CFG.maxDate,
-                maxYear = maxDate.getFullYear(),
-                maxMonth = maxDate.getMonth();
-            if (curYear > maxYear) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === maxYear && curMonth > maxMonth) {
-                $td.addClass('disabled');
-            } 
-            if (curYear === maxYear && curMonth === maxMonth) {
-                $td.each(function() {
-                    if (parseInt($(this).text(), 10) > maxDate.getDate()) {
-                        $(this).addClass('disabled');
-                    }
-                });
-            } 
-        }  
+        this.table.find('td').each(function() {
+            var dateValue = parseInt($(this).text(), 10),
+                thisDate = new Date(data.year, data.month, dateValue);
+            if ((CFG.maxDate && thisDate > CFG.maxDate) || (CFG.minDate && thisDate < CFG.minDate)) {
+                $(this).addClass('disabled');
+            }
+        });
 
         //上月日期设为不可选
         this.table.find('tbody tr:first-child').find('td').each(function(){
