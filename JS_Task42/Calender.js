@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-04 23:06:20
+* @Last Modified time: 2017-09-05 11:26:26
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -10,19 +10,19 @@ var Calender = function(cfg) {
         showItem: null,
         currentDate: new Date(),
         minDate: null,
-        maxDate: null, 
+        maxDate: null,         
+        selectHandler: function(msg) {
+            console.log(msg)
+        },
         rangeSelect: false,
         maxRange: 100,
-        maxRangeHandler: function(data) {
-            alert(data);
+        maxRangeHandler: function(msg) {
+            alert(msg);
         },
         minRange: 3,
-        minRangeHandler: function(data) {
-            alert(data);
-        },
-        selectHandler: function(data) {
-            console.log(data)
-        },
+        minRangeHandler: function(msg) {
+            alert(msg);
+        },        
         width: 400,
         height: 400,
         fontSize: 16,
@@ -50,11 +50,11 @@ Calender.prototype = {
         this.data.year = curDate.getFullYear();
         this.data.month = curDate.getMonth();
         this.data.date = curDate.getDate();
-        this.getDateArr();
+        this.getMonthData();
     },
 
     //获取当前月份的所有日期数据
-    getDateArr: function() {
+    getMonthData: function() {
         var CFG = this.CFG,
             curMonth = this.data.month,
             curYear = this.data.year,
@@ -62,23 +62,24 @@ Calender.prototype = {
             lastDate = new Date(curYear, curMonth + 1, 0);
 
         //清空数据
-        this.data.dateArr = [];
+        this.data.monthData = [];
+        var monthData = this.data.monthData;
 
         //添加本月的日期
         for (var i = 0; i < lastDate.getDate(); i++) {
-            this.data.dateArr.push(i + 1);
+            monthData.push(i + 1);
         }
 
         //如果第一天不是周日，则从上月补齐至周日
         while (firstDate.getDay() !== 0) {
             firstDate.setDate(firstDate.getDate() - 1);
-            this.data.dateArr.unshift(firstDate.getDate());
+            monthData.unshift(firstDate.getDate());
         }
 
         //如果最后一天不是周六，则从下月补齐至周日
         while (lastDate.getDay() !== 6) {
             lastDate.setDate(lastDate.getDate() + 1);
-            this.data.dateArr.push(lastDate.getDate());
+            monthData.push(lastDate.getDate());
         }     
     },
    
@@ -91,7 +92,7 @@ Calender.prototype = {
                 width: CFG.width + 'px',
                 height: CFG.height + 'px',
             });
-        CFG.themeColor&& this.wrapper.addClass(CFG.themeColor);
+        CFG.themeColor && this.wrapper.addClass(CFG.themeColor);
         this.renderHead();
         this.renderTable();
         CFG.rangeSelect && this.renderBtn();
@@ -147,7 +148,7 @@ Calender.prototype = {
     //渲染表格数据
     renderTableData: function() {
         var html = '';
-        this.data.dateArr.forEach(function(item, index) {
+        this.data.monthData.forEach(function(item, index) {
             if (index % 7 === 0) {
                 html += '<tr><td class="highlight">' + item + '</td>'
             } else if (index % 7 === 6) {
@@ -176,6 +177,7 @@ Calender.prototype = {
         var CFG = this.CFG,
             data = this.data;
         
+        //设置可选日期上下限
         this.table.find('td').each(function() {
             var dateValue = parseInt($(this).text(), 10),
                 thisDate = new Date(data.year, data.month, dateValue);
@@ -204,9 +206,7 @@ Calender.prototype = {
         var curDate = this.data.date,
             self = this;
         this.table.find('td').each(function() {
-            if (!self.data.dateEnd) {
-                $(this).removeClass('selected');
-            }           
+            $(this).removeClass('selected');        
             if (parseInt($(this).text(), 10) === curDate && !$(this).is('.disabled')) {
                 $(this).addClass('selected');
             }
@@ -218,8 +218,8 @@ Calender.prototype = {
         var $target = $(e.target),
             CFG = this.CFG;               
         if (!$target.is('.disabled')) {
-            this.data.Date.setDate(parseInt($target.text(), 10));
-            this.updateCurDate(this.data.Date);
+            this.data.date = parseInt($target.text(), 10)
+            this.data.Date.setDate(this.data.date);
             this.renderSelected();
             this.showSelectedDate();
             CFG.container.hide();
@@ -235,14 +235,12 @@ Calender.prototype = {
         if (!$target.is('.disabled')) {
             if (!data.firstFlag && !data.secondFlag) {
                 data.firstFlag = true;
-                data.Date.setDate(parseInt($target.text(), 10));
-                data.date = data.Date.getDate();
+                data.date = parseInt($target.text(), 10)
                 data.firstDate = new Date(data.year, data.month, data.date);
                 this.renderSelected();
             } else {
                 data.secondFlag = true;
-                data.Date.setDate(parseInt($target.text(), 10));
-                data.date = data.Date.getDate();
+                data.date = parseInt($target.text(), 10)
                 data.secondDate = new Date(data.year, data.month, data.date);
                 this.renderDateRange();
             }
@@ -254,6 +252,7 @@ Calender.prototype = {
         var data = this.data,
             CFG = this.CFG,
             range = null;
+
         data.dateStart = new Date(Math.min(data.firstDate, data.secondDate));
         data.dateEnd = new Date(Math.max(data.firstDate, data.secondDate));
         range = (data.dateEnd - data.dateStart)/(3600000*24);
@@ -274,9 +273,9 @@ Calender.prototype = {
             var dateValue = parseInt($(this).text(), 10),
                 today = new Date(data.year, data.month, dateValue);
 
-            $(this).removeClass('range-selected').removeClass('selected');
+            $(this).removeClass('range-selected selected');
 
-            if (!($(this).is('.disabled'))) {
+            if (!$(this).is('.disabled')) {
                 if (today > data.dateStart && today < data.dateEnd) {
                     $(this).addClass('range-selected');
                 }
@@ -295,12 +294,12 @@ Calender.prototype = {
         CFG.selectHandler && CFG.selectHandler(this.data.Date);
     },
 
-    //清空选择的日期范围
+    //清空日期范围
     clearDateRange: function() {
         var data = this.data;
         data.firstFlag = false;
         data.secondFlag = false;
-        this.table.find('td').removeClass('range-selected').removeClass('selected');
+        this.table.find('td').removeClass('range-selected selected');
         this.CFG.showItem.val('');
     },
 
@@ -310,7 +309,6 @@ Calender.prototype = {
         this.renderTableData();
         this.updateHeaderValue();        
     },
-
 
     //更新头部月份值与年份值
     updateHeaderValue: function() {
@@ -391,6 +389,7 @@ Calender.prototype = {
         });
         this.wrapper.find('.confirm-btn').on('click', this.confirmDateRange.bind(this));
         this.wrapper.find('.cancel-btn').on('click', this.clearDateRange.bind(this));
+
         $('#month-input').on('blur', this.changeMonth.bind(this));
         $('#year-input').on('blur', this.changeYear.bind(this)); 
 
@@ -410,7 +409,6 @@ Calender.prototype = {
                 case $target.is('.year-controller .icon-unfold'): self.goNextYear();
                     break;
             }
-        });
-              
+        });             
     }
 }

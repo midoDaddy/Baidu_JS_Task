@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:09
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-04 23:00:01
+* @Last Modified time: 2017-09-05 10:44:34
 */
 $(function() {
     var calenderSingleCon = $('.calender-single-container').hide(),
@@ -10,7 +10,15 @@ $(function() {
         dateSingleInput = $('#date-single-select-input');
         dateRangeInput = $('#date-range-select-input');
 
-    var calenderRange = new Calender({
+    var calenderSinge = new Calender({
+            container: calenderSingleCon,
+            showItem: dateSingleInput, 
+            maxDate: new Date(2017, 9, 31),
+            minDate: new Date(2016, 0, 26),   
+            width: 300,
+            height: 300
+        }),
+        calenderRange = new Calender({
             container: calenderRangeCon,
             showItem: dateRangeInput, 
             rangeSelect: true,  
@@ -18,16 +26,8 @@ $(function() {
             minRange: 5,    
             width: 300,
             height: 300
-        }),
-        calenderSinge = new Calender({
-            container: calenderSingleCon,
-            showItem: dateSingleInput, 
-            maxDate: new Date(2017, 9, 31),
-            minDate: new Date(2016, 0, 26),   
-            width: 300,
-            height: 300
         });
-
+        
     dateSingleInput.on('click', function(){
         calenderSingleCon.toggle();
     });
