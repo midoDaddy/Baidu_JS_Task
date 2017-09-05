@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-05 23:38:04
+* @Last Modified time: 2017-09-05 23:52:50
 */
 var ImgLayouter = function(cfg) {    
     this.cfg = {
@@ -99,36 +99,37 @@ ImgLayouter.prototype = {
 
     //剪切图片至目标尺寸
     clipImgTo: function(el, width, height) {
-        var newImage, elWidth, elHeight, heightDiff, widthDiff, 
+        var elWidth, elHeight, heightDiff, widthDiff, 
             clipTop, clipBottom, clipLeft, clipRight;
-        newImage = $(new Image());
-        newImage.attr('src', el.attr('src'));
-        newImage.on('load', function() {
+        el.on('load', function() {
+            var self = $(this);
             elWidth = $(this).width();
             elHeight = $(this).height();
-            console.log(elWidth);
-            console.log(elHeight);
+            if (elWidth/elHeight < width/height) {
+                self.width(width);
+                self.height(width*elHeight/elWidth);
+                heightDiff = self.height() - height;
+                clipTop = heightDiff/2 + 'px';
+                clipBottom = self.height() - heightDiff/2 + 'px';
+                self.css({
+                    clip: 'rect(' + clipTop + ',' + width + 'px,' + clipBottom + ',0)',
+                    top: '-' + clipTop
+                });
+            } else {
+                self.height(height);
+                self.width(height*elWidth/elHeight);
+                widthDiff = self.width() - width;
+                clipLeft = widthDiff/2 + 'px';
+                clipRight = self.width() - widthDiff/2 + 'px';
+                self.css({
+                    clip: 'rect(0,' + clipRight + ',' + height + 'px,' + clipLeft + ')',
+                    left: '-' + clipLeft
+                });
+            }
         })
         
 
-        /*if (elWidth/elHeight < width/height) {
-            el.width(width);
-            el.height(width*elHeight/elWidth);
-            heightDiff = el.height() - height;
-            clipTop = heightDiff/2 + 'px';
-            clipBottom = el.height() - heightDiff/2 + 'px';
-            el.css('clip', 'rect(' + clipTop + ',' + width + 'px,' + clipBottom + ',0)');
-        } else {
-            el.height(height);
-            
-
-            console.log(height*elWidth/elHeight)
-            el.width(height*elWidth/elHeight);
-            widthDiff = el.width() - width;
-            clipLeft = widthDiff/2 + 'px';
-            clipRight = el.width() - widthDiff/2 + 'px';
-            el.css('clip', 'rect(0,' + clipRight + ',' + height + 'px,' + clipLeft + ')');
-        }*/
+        
     }
 
 }
