@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-05 11:26:26
+* @Last Modified time: 2017-09-05 13:47:39
 */
 var Calender = function(cfg) {
     this.cfg = {
@@ -107,14 +107,14 @@ Calender.prototype = {
        this.header = $('<div class="calender-header"></div>').appendTo(this.wrapper)
         .html(  '<i class="iconfont icon-return"></i>' + 
                 '<div class="input-item-wrapper">' +
-                    '<input type="text" id="month-input" class="input-item" value="' + month + '月">' +
+                    '<input type="text" class="input-item month-input" value="' + month + '月">' +
                     '<div class="controller-wrapper month-controller">' +
                         '<i class="iconfont icon-packup"></i>' +
                         '<i class="iconfont icon-unfold"></i>' +                       
                     '</div>' +
                 '</div>' +
                 '<div class="input-item-wrapper">' +
-                    '<input type="text" id="year-input" class="input-item" value="' + year + '年">' +
+                    '<input type="text" class="input-item year-input" value="' + year + '年">' +
                     '<div class="controller-wrapper year-controller">' +
                         '<i class="iconfont icon-packup"></i>' +
                         '<i class="iconfont icon-unfold"></i>' +
@@ -236,39 +236,46 @@ Calender.prototype = {
             if (!data.firstFlag && !data.secondFlag) {
                 data.firstFlag = true;
                 data.date = parseInt($target.text(), 10)
-                data.firstDate = new Date(data.year, data.month, data.date);
+                data.dateStart = new Date(data.year, data.month, data.date);
                 this.renderSelected();
             } else {
                 data.secondFlag = true;
                 data.date = parseInt($target.text(), 10)
-                data.secondDate = new Date(data.year, data.month, data.date);
+                data.dateEnd = new Date(data.year, data.month, data.date);
+                this.handleRangeData();
                 this.renderDateRange();
+                this.showSelectedDate();
             }
+        }
+    },
+
+    //处理时段数据
+    handleRangeData: function() {
+        var data = this.data,
+            CFG = this.CFG,
+            range = null;
+        if (data.dateStart > data.dateEnd) {
+            var temp = +data.dateStart;
+            data.dateStart = new Date(data.dateEnd);
+            data.dateEnd = new Date(temp);
+        }
+
+        range = (data.dateEnd - data.dateStart)/(3600000*24);
+        if (CFG.minRange && range < CFG.minRange) {
+            var minMsg = '日期范围不得小于' + CFG.minRange + '天';
+            CFG.minRangeHandler && CFG.minRangeHandler(minMsg);
+            data.dateEnd.setDate(data.dateEnd.getDate() - range + CFG.minRange);
+        }
+        if (CFG.maxRange && range > CFG.maxRange) {
+            var maxMsg = '日期范围不得超过' + CFG.maxRange + '天';
+            CFG.maxRangeHandler && CFG.maxRangeHandler(maxMsg);
+            data.dateEnd.setDate(data.dateEnd.getDate() - range + CFG.maxRange);
         }
     },
 
     //渲染所选日期范围的样式
     renderDateRange: function() {
-        var data = this.data,
-            CFG = this.CFG,
-            range = null;
-
-        data.dateStart = new Date(Math.min(data.firstDate, data.secondDate));
-        data.dateEnd = new Date(Math.max(data.firstDate, data.secondDate));
-        range = (data.dateEnd - data.dateStart)/(3600000*24);
-
-        if (CFG.minRange && range < CFG.minRange) {
-            var minMsg = '日期范围不得小于' + CFG.minRange + '天';
-            CFG.minRangeHandler && CFG.minRangeHandler(minMsg);
-            data.dateEnd.setDate(data.dateStart.getDate() + CFG.minRange);
-        }
-
-        if (CFG.maxRange && range > CFG.maxRange) {
-            var maxMsg = '日期范围不得超过' + CFG.maxRange + '天';
-            CFG.maxRangeHandler && CFG.maxRangeHandler(maxMsg);
-            data.dateEnd.setDate(data.dateStart.getDate() + CFG.maxRange);
-        }
-
+        var data = this.data;        
         this.table.find('td').each(function() {
             var dateValue = parseInt($(this).text(), 10),
                 today = new Date(data.year, data.month, dateValue);
@@ -283,8 +290,7 @@ Calender.prototype = {
                     $(this).addClass('selected');
                 }
             }           
-        });
-        this.showSelectedDate();
+        });        
     },
 
     //日期范围的确认提交
@@ -312,8 +318,8 @@ Calender.prototype = {
 
     //更新头部月份值与年份值
     updateHeaderValue: function() {
-        $('#month-input').val(this.data.month + 1 + '月');
-        $('#year-input').val(this.data.year + '年');
+        this.header.find('.month-input').val(this.data.month + 1 + '月');
+        this.header.find('.year-input').val(this.data.year + '年');
     },
     
     //获取选中日期
@@ -390,8 +396,8 @@ Calender.prototype = {
         this.wrapper.find('.confirm-btn').on('click', this.confirmDateRange.bind(this));
         this.wrapper.find('.cancel-btn').on('click', this.clearDateRange.bind(this));
 
-        $('#month-input').on('blur', this.changeMonth.bind(this));
-        $('#year-input').on('blur', this.changeYear.bind(this)); 
+        this.header.on('blur', '.month-input', this.changeMonth.bind(this));
+        this.header.on('blur', '.year-input', this.changeYear.bind(this)); 
 
         this.header.on('click', function(e) {
             var $target = $(e.target);
