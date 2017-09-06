@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:03
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-05 23:42:55
+* @Last Modified time: 2017-09-06 13:20:59
 */
 * {
     margin: 0;
@@ -13,12 +13,9 @@
 }
 
 .layouter-wrapper {
-    position: relative;
-    margin: 0 auto;
-    background: tomato;
+    margin: 20px auto;
 }
 
 .layouter-wrapper img {
-    position: absolute;
 }
 
