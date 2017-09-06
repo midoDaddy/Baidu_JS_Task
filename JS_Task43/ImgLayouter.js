@@ -2,11 +2,11 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-06 12:26:55
+* @Last Modified time: 2017-09-06 14:36:31
 */
 var ImgLayouter = function(cfg) {    
     this.cfg = {
-        container: null,
+        container: $('#wrapper'),
         data: null,
         width: 600,
         height: 450,
@@ -24,7 +24,7 @@ ImgLayouter.prototype = {
     init: function() {
         this.createWrapper();
         this.createImgs();
-        this.layoutImag();
+        this.layoutImg();
     },
     
     //创建图片容器
@@ -55,7 +55,7 @@ ImgLayouter.prototype = {
     },
 
     //布局图片
-    layoutImag: function() {
+    layoutImg: function() {
         switch(this.imgElems.length) {
             case 1: this.forOne();
                 break;
@@ -80,27 +80,24 @@ ImgLayouter.prototype = {
     //两张图片
     forTwo: function() {
         var CFG = this.CFG,
-            width = CFG.width*2/3,
+            width = CFG.width,
             height = CFG.height,
             firstImg = this.imgElems[0],
             secondImg = this.imgElems[1],
             that = this;
         
+        this.clipImgTo(firstImg, width*2/3, height); 
+
         firstImg.on('load', function() {
             var self = $(this),
                 thisWidth = self.width(),
                 thisHeight = self.height();
             if (thisWidth/thisHeight > width/height) {
-                self.height(height);
-                self.width(thisWidth*height/thisHeight);
-                widthDiff = self.width() - width;
-                that.setClipPath(self, widthDiff/2, 0, width + widthDiff/2, 0, 
-                    self.width()/2, height, widthDiff/2, height);
-                self.css('left', -widthDiff/2 + 'px')
+                var widthDiff = thisWidth - width;
+                that.setClipPath(self, 0, 0, width + widthDiff/2, 0, thisWidth/2, height, 0, height);
+                self.css('left', -widthDiff/2 + 'px');
             } else {
-                self.width(width);
-                self.height(thisHeight*width/thisWidth);
-                heightDiff = self.height() - height;
+                var heightDiff = thisHeight - height;
                 that.setClipPath(self, 0, heightDiff/2, width, heightDiff/2, 
                     width/2, height + heightDiff/2, 0, height + heightDiff/2);
                 self.css('top', -heightDiff/2 + 'px');
@@ -108,21 +105,17 @@ ImgLayouter.prototype = {
         })
 
         secondImg.css('left', width/2 + 'px');
+        this.clipImgTo(secondImg, width, height); 
         secondImg.on('load', function() {
             var self = $(this),
                 thisWidth = self.width(),
                 thisHeight = self.height();
             if (thisWidth/thisHeight > width/height) {
-                self.height(height);
-                self.width(thisWidth*height/thisHeight);
-                widthDiff = self.width() - width;
-                that.setClipPath(self, self.width()/2, 0, width + widthDiff/2, 0, 
-                    widthDiff, height, widthDiff/2, height);
+                var widthDiff = thisWidth - width;
+                that.setClipPath(self, thisWidth/2, 0, width, 0, width, height, widthDiff/2, height);
                 self.css('left', parseInt(self.css('left'), 10) - widthDiff/2 + 'px');
             } else {
-                self.width(width);
-                self.height(thisHeight*width/thisWidth);
-                heightDiff = self.height() - height;
+                var heightDiff = thisHeight - height;
                 that.setClipPath(self,  width/2, heightDiff/2, width, heightDiff/2, 
                     width, height + heightDiff/2, 0, height + heightDiff/2);
                 self.css('top', -heightDiff/2 + 'px');
@@ -287,9 +280,10 @@ ImgLayouter.prototype = {
             }
         })        
     },
-
+    
+    //设置clip-path样式
     setClipPath: function(el, x1, y1, x2, y2, x3, y3, x4, y4) {
-        el.css({
+        el && el.css({
             'clip-path': 'polygon(' + x1 + 'px ' + y1 + 'px,' + x2 + 'px ' + y2 + 'px,' +
                 x3 + 'px ' + y3 + 'px,' + x4 + 'px ' + y4 + 'px)'
         })
