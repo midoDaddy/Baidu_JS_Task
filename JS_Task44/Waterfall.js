@@ -2,17 +2,18 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-06 22:42:09
+* @Last Modified time: 2017-09-07 15:22:11
 */
 var Waterfall = function(cfg) {    
     this.cfg = {
         data: null,
         container: null,
         imgWidth: 200,
-        margin: 20
+        padding: 10
     },
     this.CFG = $.extend(this.cfg, cfg);
     this.heightData = [];
+    this.imgsArr = [];
     this.init();     
 }
 
@@ -23,8 +24,7 @@ Waterfall.prototype = {
     //初始化
     init: function() {
         this.getCols();
-        this.createWrapper();      
-        this.renderImg();
+        this.renderUI();    
         this.bindEvent();
     },
 
@@ -32,55 +32,91 @@ Waterfall.prototype = {
     getCols: function() {
         var CFG = this.CFG,
             totalWidth = CFG.container.width() || $('body').width();
-        this.cols = Math.floor((totalWidth + CFG.margin)/(CFG.imgWidth + CFG.margin));
+        this.cols = Math.floor(totalWidth/(CFG.imgWidth + CFG.padding*2));
     },
 
-    //创建包裹层
-    createWrapper: function() {
-        var CFG = this.CFG;
+    //渲染UI
+    renderUI: function() {
+        var CFG = this.CFG,
+            self = this;
+
+        //添加包裹层
         this.wrapper = $('<div class="waterfall-wrapper"></div>')
             .appendTo(CFG.container)
             .css({
                 position: 'relative',
-                width: CFG.imgWidth*this.cols + CFG.margin*(this.cols - 1),
+                width: (CFG.imgWidth + CFG.padding*2)*this.cols,
                 margin: '0 auto'
             });
+
+        //添加图片
+        this.renderImg(CFG.data.init);
+        this.setImgPos();
     },
 
-    //渲染图片
-    renderImg: function() {
+    //添加图片
+    renderImg: function(data) {
+        var html = '';
+        $.each(data, function(index, item) {
+            html += '<div class="img-con"><img src="' + item.src + '"></div>';
+        })
+        $(html).appendTo(this.wrapper);
+        this.wrapper.find('.img-con').css({
+                position: 'absolute',
+                padding: this.CFG.padding
+            }).find('img').css({
+                width: this.CFG.imgWidth,
+                height: 'auto',
+                cursor: 'pointer'
+            });;       
+    },
+
+
+    //图片定位
+    setImgPos: function() {
         var CFG = this.CFG,
             self = this;
-        CFG.data.forEach(function(item, index) {
-            $('<img src="' + item + '">').appendTo(self.wrapper)
-                .css({
-                    position: 'absolute',
-                    width: CFG.imgWidth + 'px',
-                    height: 'auto',
-                    cursor: 'pointer'
-                })
-                .on('load', function() {
-                    if (index < self.cols) {
-                        self.heightData.push($(this).height());
-                        $(this).css('left', (CFG.imgWidth + CFG.margin)*index + 'px');
-                    } else {
-                        var minHeight = Math.min.apply(null, self.heightData);
-                            minIndex = self.heightData.indexOf(minHeight);
-                        $(this).css({
-                            top: minHeight + CFG.margin + 'px',
-                            left: (CFG.imgWidth + CFG.margin)*minIndex + 'px'
-                        });
-                        self.heightData[minIndex] = minHeight + $(this).height() + CFG.margin;
-                    }
-                });            
-        })
+        this.wrapper.find('img').on('load', function() {
+            var $imgCon = $(this).parent(),
+                innerWidth = $imgCon.innerWidth(),
+                innerHeight = $imgCon.innerHeight(),
+                length = self.heightData.length;
+            if (length < self.cols) {
+                self.heightData.push(innerHeight);
+                $imgCon.css('left', length*innerWidth + 'px');
+            } else {
+                var minHeight = Math.min.apply(null, self.heightData);
+                    minIndex = self.heightData.indexOf(minHeight);
+                $imgCon.css({
+                    top: minHeight + 'px',
+                    left: innerWidth*minIndex + 'px'
+                });
+                self.heightData[minIndex] = minHeight + innerHeight;
+            } 
+            self.imgsArr.push($(this));           
+        });        
+    },
+
+
+    //页面滚动到底部时，加载更多图片
+    loadMore: function() {
+        var scrollTop = $(window).height() + $(window).scrollTop(),
+            length = this.wrapper.find('img').length; 
+
+        //当前数据中的图片全部加载完成后，执行是否加载更多的判断
+        if (this.imgsArr.length === length) {
+            var lastImg = this.imgsArr[length - 1];
+            if (scrollTop > lastImg.offset().top) {
+                this.renderImg(this.CFG.data.plus);
+                this.setImgPos();
+            }
+        }       
     },
 
     //全屏显示
     fullScreenShow: function(e) {
         var CFG = this.CFG,
             $target = $(e.target);
-
         this.fullScreenWrapper = $('<div class="full-screen-wrapper"></div>')
             .appendTo(CFG.container)
             .css({
@@ -114,7 +150,6 @@ Waterfall.prototype = {
                     $(this).width($(window).width()*0.8);
                     $(this).css('height', 'auto');
                 }
-
                 if ($(this).height() > $(window).height()*0.8) {
                     $(this).height($(window).height()*0.8);
                     $(this).css('width', 'auto');
@@ -129,6 +164,7 @@ Waterfall.prototype = {
     //绑定事件
     bindEvent: function() {
         this.wrapper.on('click', 'img', this.fullScreenShow.bind(this));
+        $(window).on('scroll', this.loadMore.bind(this));
     }
 
 }
