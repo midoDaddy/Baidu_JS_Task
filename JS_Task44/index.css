@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:03
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-07 09:57:22
+* @Last Modified time: 2017-09-07 15:40:18
 */
 * {
     margin: 0;
@@ -12,8 +12,5 @@
     width: 1000px;
     height: auto;
     margin: 50px auto;
-}
-.full-screen-wrapper {
-
 }
 

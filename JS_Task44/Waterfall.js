@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-07 15:22:11
+* @Last Modified time: 2017-09-07 15:41:37
 */
 var Waterfall = function(cfg) {    
     this.cfg = {
@@ -49,12 +49,12 @@ Waterfall.prototype = {
                 margin: '0 auto'
             });
 
-        //添加图片
+        //渲染图片并定位
         this.renderImg(CFG.data.init);
         this.setImgPos();
     },
 
-    //添加图片
+    //渲染图片
     renderImg: function(data) {
         var html = '';
         $.each(data, function(index, item) {
@@ -70,7 +70,6 @@ Waterfall.prototype = {
                 cursor: 'pointer'
             });;       
     },
-
 
     //图片定位
     setImgPos: function() {
