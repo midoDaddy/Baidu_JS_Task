@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-08 16:29:44
+* @Last Modified time: 2017-09-08 23:04:19
 */
 var BucketLayout = function(cfg) {    
     this.cfg = {
@@ -17,6 +17,8 @@ var BucketLayout = function(cfg) {
     },
     this.CFG = $.extend(this.cfg, cfg);
     this.rowGroup = [];
+    this.maxHeight = 0;
+    this.count = 1;
     this.init();   
 }
 
@@ -26,79 +28,78 @@ BucketLayout.prototype = {
     
     //初始化
     init: function() {
-        this.renderUI();
+        this.renderWrapper();
+        this.renderImg(this.CFG.data.init);       
         this.bindEvent();
     },
 
- 
     //渲染UI
-    renderUI: function() {
+    renderWrapper: function() {
         var CFG = this.CFG,
             self = this;
         this.wrapper = $('<div class="bucket-layout-wrapper"></div>')
             .appendTo(CFG.container)
-            .width(CFG.container.width());
-        this.renderImg(CFG.data.init);       
+            .width(CFG.container.width());       
     },
 
     renderImg: function(data) {
-        var html = '';
-        $.each(data, function(index, item) {
-            html += '<div class="img-con"><img src="' + item.src + '"></div>'
-        });
-        this.wrapper.html(html).find('.img-con')
-            .css({
-                float: 'left',
-                padding: this.CFG.padding
-            })
-            .find('img').css('width', 'auto');
-    },
-
-    layoutImg: function() {
         var CFG = this.CFG,
-            self = this,
-            rowGroup = this.rowGroup;
-        this.wrapper.find('img').each(function() {
-            var $this = $(this);
-            rowGroup.push($this.parent());
-            if (rowGroup.length >= CFG.minCount) {
-                self.setRowHeight(rowGroup);
+            self = this;
+        $.each(data, function(index, item) {
+            self.rowGroup.push(item);
+            if (self.rowGroup.length >= CFG.minCount) {
+                self.setRowHeight();
             }
         });
-        if (rowGroup.length > 0) {
-            $.each(rowGroup, function(index, item) {
-                item.find('img').css({
-                    width: 'auto',
-                    height: CFG.maxHeight + 'px'
-                });                  
-            })
-        }
     },
 
-    setRowHeight: function(data) {
+    setRowHeight: function() {
         var CFG = this.CFG,
             totalRatio = 0,
-            length = data.length,
+            length = this.rowGroup.length,
             rowHeight;
-        $.each(data, function(index, item) {
-            var $img = item.find('img');
-            totalRatio += $img.width()/$img.height();                    
-        })
+        $.each(this.rowGroup, function(index, item) {
+            totalRatio += item.initWidth/item.initHeight; 
+        });
         rowHeight = (CFG.totalWidth - CFG.padding*2*length)/totalRatio;
         if (rowHeight <= CFG.maxHeight || rowHeight >= CFG.maxHeight && length === CFG.maxCount) {
-            $.each(data, function(index, item) {
-                item.find('img').css({
-                    width: 'auto',
-                    height: rowHeight + 'px'
-                });                  
-            })
+            $.each(this.rowGroup, function(index, item) {
+                item.height = rowHeight;                  
+            });
+            this.maxHeight += rowHeight + CFG.padding*2; 
+            this.renderRowGroup();
             this.rowGroup.length = 0;
         }
     },
 
+    renderRowGroup: function() {
+        var html = '';
+        $.each(this.rowGroup, function(index, item) {
+            html += '<div class="img-con">' +
+                '<img src="' + item.src + '" height="' + item.height + 'px">' +
+            '</div>';
+        });
+        $('<div class="row-group">' + html + '</div>').appendTo(this.wrapper)
+            .find('.img-con')
+            .css({
+                float: 'left',
+                padding: this.CFG.padding
+            });
+    },
+
+    //加载更多图片
+    loadMore: function() {
+        var maxHeight = this.wrapper.offset().top + this.maxHeight,
+            scrollTop = $(window).height() + $(window).scrollTop();       
+        if (scrollTop > maxHeight) {
+            this.renderImg(this.CFG.data.plus);
+        }
+
+    },
+
     //绑定事件
     bindEvent: function() {
-        $(window).on('load', this.layoutImg.bind(this))
+        $(window).on('scroll', this.loadMore.bind(this));
     }
 
 }
