@@ -2,14 +2,14 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-08 11:59:29
+* @Last Modified time: 2017-09-08 16:29:44
 */
 var BucketLayout = function(cfg) {    
     this.cfg = {
         data: null,
         container: null,
         totalWidth: 1000,
-        padding: 10,
+        padding: 5,
         maxHeight: 300,
         maxCount: 6,
         minCount: 3
@@ -17,8 +17,7 @@ var BucketLayout = function(cfg) {
     },
     this.CFG = $.extend(this.cfg, cfg);
     this.rowGroup = [];
-    this.flag = false;
-    this.init();     
+    this.init();   
 }
 
 BucketLayout.prototype = {
@@ -48,7 +47,10 @@ BucketLayout.prototype = {
             html += '<div class="img-con"><img src="' + item.src + '"></div>'
         });
         this.wrapper.html(html).find('.img-con')
-            .css('float', 'left')
+            .css({
+                float: 'left',
+                padding: this.CFG.padding
+            })
             .find('img').css('width', 'auto');
     },
 
@@ -59,12 +61,8 @@ BucketLayout.prototype = {
         this.wrapper.find('img').each(function() {
             var $this = $(this);
             rowGroup.push($this.parent());
-            if (rowGroup.length >= 3) {
+            if (rowGroup.length >= CFG.minCount) {
                 self.setRowHeight(rowGroup);
-                if (self.flag) {
-                    rowGroup = [];
-                    self.flag = false;
-                }
             }
         });
         if (rowGroup.length > 0) {
@@ -86,26 +84,18 @@ BucketLayout.prototype = {
             var $img = item.find('img');
             totalRatio += $img.width()/$img.height();                    
         })
-        rowHeight = CFG.totalWidth/totalRatio;
-        console.log(rowHeight)
-        if (rowHeight <= CFG.maxHeight || rowHeight >= CFG.maxHeight && length === 6) {
-            console.log(length)
+        rowHeight = (CFG.totalWidth - CFG.padding*2*length)/totalRatio;
+        if (rowHeight <= CFG.maxHeight || rowHeight >= CFG.maxHeight && length === CFG.maxCount) {
             $.each(data, function(index, item) {
                 item.find('img').css({
                     width: 'auto',
                     height: rowHeight + 'px'
                 });                  
             })
-            this.flag = true;
+            this.rowGroup.length = 0;
         }
-        console.log(this.flag)
     },
 
-   
-    
-
-    
-    
     //绑定事件
     bindEvent: function() {
         $(window).on('load', this.layoutImg.bind(this))
