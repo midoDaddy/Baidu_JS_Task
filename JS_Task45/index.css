@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:03
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-07 16:28:23
+* @Last Modified time: 2017-09-11 17:58:21
 */
 * {
     margin: 0;
@@ -11,5 +11,12 @@
 .wrapper {
     width: 1000px;
     margin: 50px auto;
+}
+
+.bucket-layout-wrapper .img-con {
+    float: left;
+}
+.bucket-layout-wrapper .img-con .img {
+    width: auto;
 }
 

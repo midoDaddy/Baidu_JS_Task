@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-08 23:15:27
+* @Last Modified time: 2017-09-11 17:57:22
 */
 var BucketLayout = function(cfg) {    
     this.cfg = {
@@ -12,8 +12,7 @@ var BucketLayout = function(cfg) {
         padding: 5,
         maxHeight: 300,
         maxCount: 6,
-        minCount: 3
-        
+        minCount: 3       
     },
     this.CFG = $.extend(this.cfg, cfg);
     this.rowGroup = [];
@@ -90,10 +89,7 @@ BucketLayout.prototype = {
             '</div>';
         });
         $('<div class="row-group">' + html + '</div>').appendTo(this.wrapper)
-            .find('.img-con').css({
-                float: 'left',
-                padding: this.CFG.padding
-            });
+            .find('.img-con').css('padding', this.CFG.padding);
     },
 
     //加载更多图片
