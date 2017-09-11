@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:03
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-07 15:40:18
+* @Last Modified time: 2017-09-11 18:06:07
 */
 * {
     margin: 0;
@@ -12,5 +12,35 @@
     width: 1000px;
     height: auto;
     margin: 50px auto;
+}
+
+.waterfall-wrapper {
+    position: relative;
+}
+.waterfall-wrapper .img-con {
+    position: absolute;
+    margin: 0 auto;
+}
+.waterfall-wrapper .img-con img {
+    height: auto;
+    cursor: pointer;
+}
+
+.full-screen-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.full-screen-mask {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+}
+.full-screen-wrapper img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
 }
 
