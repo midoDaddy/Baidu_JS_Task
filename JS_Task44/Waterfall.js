@@ -2,7 +2,7 @@
 * @Author: midoDaddy
 * @Date:   2017-08-31 14:46:20
 * @Last Modified by:   midoDaddy
-* @Last Modified time: 2017-09-07 15:41:37
+* @Last Modified time: 2017-09-11 18:06:16
 */
 var Waterfall = function(cfg) {    
     this.cfg = {
@@ -43,11 +43,7 @@ Waterfall.prototype = {
         //添加包裹层
         this.wrapper = $('<div class="waterfall-wrapper"></div>')
             .appendTo(CFG.container)
-            .css({
-                position: 'relative',
-                width: (CFG.imgWidth + CFG.padding*2)*this.cols,
-                margin: '0 auto'
-            });
+            .width((CFG.imgWidth + CFG.padding*2)*this.cols);
 
         //渲染图片并定位
         this.renderImg(CFG.data.init);
@@ -61,14 +57,8 @@ Waterfall.prototype = {
             html += '<div class="img-con"><img src="' + item.src + '"></div>';
         })
         $(html).appendTo(this.wrapper);
-        this.wrapper.find('.img-con').css({
-                position: 'absolute',
-                padding: this.CFG.padding
-            }).find('img').css({
-                width: this.CFG.imgWidth,
-                height: 'auto',
-                cursor: 'pointer'
-            });;       
+        this.wrapper.find('.img-con').css('padding', this.CFG.padding)
+            .find('img').width(this.CFG.imgWidth);     
     },
 
     //图片定位
@@ -117,33 +107,16 @@ Waterfall.prototype = {
         var CFG = this.CFG,
             $target = $(e.target);
         this.fullScreenWrapper = $('<div class="full-screen-wrapper"></div>')
-            .appendTo(CFG.container)
-            .css({
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            });
+            .appendTo(CFG.container);
 
         this.fullScreenMask = $('<div class="full-screen-mask"></div>')
             .appendTo(this.fullScreenWrapper)
-            .css({
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0, 0, 0, 0.8)'
-            })
             .on('click', function(){
                 $(this).parent().remove();
             });
 
         this.fullScreenImg = $('<img>').appendTo(this.fullScreenWrapper)
             .attr('src', $target.attr('src'))
-            .css({
-                position: 'absolute',
-                top: '50%',
-                left: '50%'
-            })
             .on('load', function() {
                 if ($(this).width() > $(window).width()*0.8) {
                     $(this).width($(window).width()*0.8);
